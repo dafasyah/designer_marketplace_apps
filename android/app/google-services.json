@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "570635273553",
+    "project_id": "skripsi-flutter",
+    "storage_bucket": "skripsi-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570635273553:android:706c39d03f1146754f7f70",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "570635273553-pfakbmpp1lba01mk1s6sg2dubo4u4r03.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5mnCXOZ-TeHXhrLXq24wbZ5jVe-EMnOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570635273553-pfakbmpp1lba01mk1s6sg2dubo4u4r03.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
