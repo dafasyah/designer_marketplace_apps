@@ -38,15 +38,18 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('request_designer').where('user_id', isEqualTo: FirebaseAuth.instance.currentUser.uid).snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-          if(!snapshot.hasData){
+        stream: FirebaseFirestore.instance
+            .collection('request_designer')
+            .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser.uid)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
             return Center(
               child: Text("Loading..."),
             );
           }
           return ListView(
-            children: snapshot.data.docs.map((document){
+            children: snapshot.data.docs.map((document) {
               return ListTile(
                 title: Text(document['designer_name']),
                 subtitle: Row(
@@ -56,10 +59,20 @@ class _ListPageState extends State<ListPage> {
                     )
                   ],
                 ),
+                trailing: document['status'] == 'On Progress'
+                    ? ElevatedButton(
+                        onPressed: () {},
+                        child: Text('Chat'),
+                      )
+                    : document['status'] == 'Finish'
+                        ? ElevatedButton(
+                            onPressed: () {},
+                            child: Text('Review'),
+                          )
+                        : null,
               );
             }).toList(),
           );
-        }
-    );
+        });
   }
 }

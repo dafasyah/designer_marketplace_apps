@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/designer.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/models/user_store.dart';
@@ -30,6 +33,29 @@ class AuthService{
     .map(_designerFromFirebaseUser);
   }
 
+  // get current user
+
+  Future getCurrentUser() async{
+    return _auth.currentUser;
+  } 
+
+  // get  uid
+  
+  Future<String> getCurrentUID() async{
+    return (_auth.currentUser).uid;
+  }
+
+  // get profile image
+  
+  getProfileImage(){
+    if(_auth.currentUser.photoURL != null){
+      return Image.network(_auth.currentUser.photoURL, height: 100, width: 100);
+    }else{
+      return Icon(Icons.account_circle, size: 100);
+    }
+  }
+
+
   //sign in anon
   Future signInAnon() async {
     try{
@@ -44,11 +70,21 @@ class AuthService{
   //sign in email n pass
 
   Future signInWithEmailAndPassword(String email, String password) async {
+
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       User user = result.user;
       return _userFromFirebaseUser(user);
-    }catch(e){
+
+     
+    }on FirebaseAuthException catch(e){
+
+  //     if (e.code == 'user-not-found') {
+  //   print('No user found for that email.');
+  // } else if (e.code == 'wrong-password') {
+  //   print('Wrong password provided for that user.');
+  // }
+      
      print(e.toString());
      return null;
     }
