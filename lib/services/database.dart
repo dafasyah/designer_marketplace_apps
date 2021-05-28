@@ -46,7 +46,7 @@ class DatabaseService {
     return snapshot.docs.map((doc){
       return DesignerStore(
         name: doc.data()['name'] ?? '',
-        rating: doc.data()['rating'] ?? 0,
+        // rating: doc.data()['rating'] ?? 0,
         role: doc.data()['role'] ?? ''
         );
     }).toList();
