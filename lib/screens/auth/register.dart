@@ -24,6 +24,9 @@ class _RegisterState extends State<Register> {
 
   String email = '';
   String password = '';
+  String address = '';
+  String fullname = '';
+  int phoneNumber = 0;
   String error = '';
 
   @override
@@ -83,7 +86,7 @@ class _RegisterState extends State<Register> {
                 onPressed:  () async {
                   if (_formKey.currentState.validate()){
                     setState(() => loading = true);
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password, fullname, address, phoneNumber);
                     if(result == null){
                       setState(() { 
                         error = 'Please enter a valid email';

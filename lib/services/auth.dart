@@ -47,13 +47,13 @@ class AuthService{
 
   // get profile image
   
-  getProfileImage(){
-    if(_auth.currentUser.photoURL != null){
-      return Image.network(_auth.currentUser.photoURL, height: 100, width: 100);
-    }else{
-      return Icon(Icons.account_circle, size: 100);
-    }
-  }
+  // getProfileImage(){
+  //   if(_auth.currentUser.photoURL != null){
+  //     return Image.network(_auth.currentUser.photoURL, height: 100, width: 100);
+  //   }else{
+  //     return Icon(Icons.account_circle, size: 100);
+  //   }
+  // }
 
 
   //sign in anon
@@ -92,12 +92,12 @@ class AuthService{
 
   //register email n pass
 
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(String email, String password, String fullname, String address, int phoneNumber) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User user = result.user;
 
-      await DatabaseService(uid: user.uid).updateUserData(email, 'user', result.user.uid);
+      await DatabaseService(uid: user.uid).updateUserData(email, 'user', result.user.uid, fullname, address, phoneNumber);
       return _userFromFirebaseUser(user);
     }catch(e){
      print(e.toString());

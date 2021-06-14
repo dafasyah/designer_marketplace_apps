@@ -14,7 +14,7 @@ import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_application_1/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:rxdart/rxdart.dart';
+// import 'package:rxdart/rxdart.dart';
 
 // void main() {
 //   runApp(MyApp());
@@ -30,11 +30,11 @@ void main() async {
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   
-Stream<DocumentSnapshot> getData() {
-  Stream stream1 = FirebaseFirestore.instance.collection('user').where('role', isEqualTo: 'type1').snapshots();
-  Stream stream2 = FirebaseFirestore.instance.collection('designer').where('type', isEqualTo: 'type2').snapshots();
-  return Observable.merge(([stream2, stream1]));
-}
+// Stream<DocumentSnapshot> getData() {
+//   Stream stream1 = FirebaseFirestore.instance.collection('user').where('role', isEqualTo: 'type1').snapshots();
+//   Stream stream2 = FirebaseFirestore.instance.collection('designer').where('type', isEqualTo: 'type2').snapshots();
+//   return Observable.merge(([stream2, stream1]));
+// }
 
   @override
   Widget build(BuildContext context) {

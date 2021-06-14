@@ -1,8 +1,13 @@
+// import 'dart:html' as html;
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_application_1/models/designer.dart';
 import 'package:flutter_application_1/models/designer_store.dart';
 import 'package:flutter_application_1/models/user_store.dart';
 import 'package:flutter_application_1/models/user.dart';
+import 'package:path/path.dart';
 
 
 class DatabaseService {
@@ -15,11 +20,22 @@ class DatabaseService {
   // final CollectionReference designerCollection = FirebaseFirestore.instance.collection('designer');
   
 
-  Future updateUserData(String name, String role, String uid) async {
+  Future updateUserData(String name, String role, String uid, String fullname, String address, int phoneNumber) async {
     return await userCollection.doc(uid).set({
-      'name': name,
-      'role': role,
-      'user_id' : uid,
+        'name': name,
+        'role': role,
+        'user_id' : uid,
+        'fullname' : fullname,
+        'address' : address,
+        'phone_number' : phoneNumber
+    });
+  }
+
+  Future updateUserProfile(String name, String role, String uid, String fullname, String address, int phoneNumber) async{
+    return await userCollection.doc(uid).update({    
+      'fullname' : fullname,
+      'address' : address,
+      'phone_number' : phoneNumber
     });
   }
 
@@ -29,6 +45,18 @@ class DatabaseService {
       'role': role,
       'user_id' : uid,
     });
+  }
+
+  //image picker
+  static Future<String> uploadImage(File imageFile) async{
+    String fileName = basename(imageFile.path);
+
+    Reference ref = FirebaseStorage.instance.ref().child(fileName);
+    await ref.putFile(imageFile);
+    
+    return await ref.getDownloadURL();
+
+
   }
 
   //user list from snapshot

@@ -63,15 +63,15 @@ class _ListPageState extends State<ListPage> {
                     margin: EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        ElevatedButton(
-                        onPressed: (){}, 
-                        child: Text('Find Nearby Designer')),
-                        SizedBox(height: 10.0,),
+                        SizedBox(
+                          height: 10.0,
+                        ),
                         ListTile(
                           title: TextButton(
                             onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProfileDesigner())),
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfileDesigner())),
                             child: Row(
                               children: <Widget>[
                                 Text(snapshot.data[index]['name'])
@@ -96,27 +96,29 @@ class _ListPageState extends State<ListPage> {
                                                 ' ?'),
                                         actions: [
                                           TextButton(
-                                            child: Text("No"),
+                                            child: Text("No",
+                                                style: TextStyle(
+                                                    color: Colors.red)),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                           ),
                                           TextButton(
-                                              child: Text(
-                                                "Yes",
-                                                style: TextStyle(color: Colors.red),
-                                              ),
+                                              child: Text("Yes"),
                                               onPressed: () {
                                                 FirebaseFirestore.instance
-                                                    .collection('request_designer')
+                                                    .collection(
+                                                        'request_designer')
                                                     .doc()
                                                     .set({
                                                   'designer_id': snapshot
                                                       .data[index]['user_id'],
-                                                  'designer_name':
-                                                      snapshot.data[index]['name'],
+                                                  'designer_name': snapshot
+                                                      .data[index]['name'],
                                                   'user_id': FirebaseAuth
                                                       .instance.currentUser.uid,
+                                                  'user_name': FirebaseAuth
+                                                      .instance.currentUser.email,
                                                   'status': 'Waiting'
                                                 });
                                                 Navigator.popUntil(context,

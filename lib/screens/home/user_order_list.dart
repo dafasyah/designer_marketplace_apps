@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/home/review_designer.dart';
 
 class UserOrder extends StatefulWidget {
   @override
@@ -66,7 +67,10 @@ class _ListPageState extends State<ListPage> {
                       )
                     : document['status'] == 'Finish'
                         ? ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ReviewDesigner()));
+                            },
                             child: Text('Review'),
                           )
                         : null,
