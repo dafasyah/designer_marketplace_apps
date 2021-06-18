@@ -18,6 +18,15 @@ class ProfileUser extends StatefulWidget {
 class _ProfileUserState extends State<ProfileUser> {
   final AuthService _auth = AuthService();
   String imagePath;
+
+  
+Future<File> getImage() async {
+  return await ImagePicker.pickImage(source: ImageSource.gallery);
+  // var tempImage =  await ImagePicker.pickImage(source: ImageSource.gallery);
+  // setState(() {
+  //   imagePath = tempImage;
+  // });
+}
   
   // String userID = '';
 
@@ -100,6 +109,7 @@ class _ProfileUserState extends State<ProfileUser> {
                               child: Text('Change Profile Picture'),
                               onPressed: () async {
                                 File file = await getImage();
+
                                 imagePath =
                                     await DatabaseService.uploadImage(file);
 
@@ -145,6 +155,3 @@ class _ProfileUserState extends State<ProfileUser> {
  
 }
 
-Future<File> getImage() async {
-  return await ImagePicker.pickImage(source: ImageSource.gallery);
-}

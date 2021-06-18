@@ -48,16 +48,22 @@ class DatabaseService {
   }
 
   //image picker
-  static Future<String> uploadImage(File imageFile) async{
+  static Future uploadImage(File imageFile) async{
     String fileName = basename(imageFile.path);
 
     Reference ref = FirebaseStorage.instance.ref().child(fileName);
     await ref.putFile(imageFile);
-    
     return await ref.getDownloadURL();
 
+    // final String downloadUrl =  await ref.getDownloadURL();
+    // return await FirebaseFirestore.instance.collection('user').doc(uid).update({
+    //   'url': downloadUrl,
+    //   'name': imageFile,
+    // });
 
   }
+
+  
 
   //user list from snapshot
   List<UserStore> _userListFromSnapshot(QuerySnapshot snapshot){

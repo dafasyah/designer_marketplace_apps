@@ -60,79 +60,87 @@ class _ListPageState extends State<ListPage> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (_, index) {
                   return Container(
-                    margin: EdgeInsets.all(10),
+                    // margin: EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        ListTile(
-                          title: TextButton(
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileDesigner())),
-                            child: Row(
-                              children: <Widget>[
-                                Text(snapshot.data[index]['name'])
-                              ],
+                        // SizedBox(
+                        //   height: 10.0,
+                        // ),
+                        Card(
+                          margin: const EdgeInsets.all(10),
+                          child: ListTile(
+                            
+                            title: TextButton(
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfileDesigner())),
+                              child: Row(
+                                children: <Widget>[
+                                  Text(snapshot.data[index]['name'])
+                                ],
+                              ),
                             ),
-                          ),
-                          trailing:
-                              // Row(
-                              //     children: <Widget>[
+                            trailing:
+                                // Row(
+                                //     children: <Widget>[
 
-                              Expanded(
-                                  child: RaisedButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                        title: Text("Hire?"),
-                                        content: Text(
-                                            "Are you sure you want to hire " +
-                                                snapshot.data[index]['name'] +
-                                                ' ?'),
-                                        actions: [
-                                          TextButton(
-                                            child: Text("No",
-                                                style: TextStyle(
-                                                    color: Colors.red)),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                              child: Text("Yes"),
+                                Expanded(
+                                    child: RaisedButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                          title: Text("Hire?"),
+                                          content: Text(
+                                              "Are you sure you want to hire " +
+                                                  snapshot.data[index]['name'] +
+                                                  ' ?'),
+                                          actions: [
+                                            TextButton(
+                                              child: Text("No",
+                                                  style: TextStyle(
+                                                      color: Colors.red)),
                                               onPressed: () {
-                                                FirebaseFirestore.instance
-                                                    .collection(
-                                                        'request_designer')
-                                                    .doc()
-                                                    .set({
-                                                  'designer_id': snapshot
-                                                      .data[index]['user_id'],
-                                                  'designer_name': snapshot
-                                                      .data[index]['name'],
-                                                  'user_id': FirebaseAuth
-                                                      .instance.currentUser.uid,
-                                                  'user_name': FirebaseAuth
-                                                      .instance.currentUser.email,
-                                                  'status': 'Waiting'
-                                                });
-                                                Navigator.popUntil(context,
-                                                    ModalRoute.withName("/"));
-                                              })
-                                        ],
-                                      ));
-                            },
-                            child: Text("Hire"),
-                            color: Colors.blue,
-                            textColor: Colors.white,
-                          )),
-                          // ]
-                          // ),
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                            TextButton(
+                                                child: Text("Yes"),
+                                                onPressed: () {
+                                                  FirebaseFirestore.instance
+                                                      .collection(
+                                                          'request_designer')
+                                                      .doc()
+                                                      .set({
+                                                    'designer_id': snapshot
+                                                        .data[index]['user_id'],
+                                                    'designer_name': snapshot
+                                                        .data[index]['name'],
+                                                    'user_id': FirebaseAuth
+                                                        .instance
+                                                        .currentUser
+                                                        .uid,
+                                                    'user_name': FirebaseAuth
+                                                        .instance
+                                                        .currentUser
+                                                        .email,
+                                                    'status': 'Waiting'
+                                                  });
+                                                  Navigator.popUntil(context,
+                                                      ModalRoute.withName("/"));
+                                                })
+                                          ],
+                                        ));
+                              },
+                              child: Text("Hire"),
+                              color: Colors.blue,
+                              textColor: Colors.white,
+                            )),
+                            // ]
+                            // ),
+                          ),
                         ),
                       ],
                     ),
