@@ -1,6 +1,5 @@
 // import 'dart:html';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,9 +30,9 @@ class _ProfileUserState extends State<ProfileUser> {
   String _imagePath = '';
   String _userFullName = '';
   String _userAddress = '';
-  String _userUID;
-  String _userEmail;
-  String _userRole;
+  // String _userUID;
+  // String _userEmail;
+  // String _userRole;
   String _userPhoneNumber = '';
 
   Future<File> getImage() async {
@@ -63,9 +62,9 @@ void showToast(String msg, {int duration, int gravity}) {
                 final userAddress = snapshot.data['address'].toString();
                 final userPhoneNumber =
                     snapshot.data['phone_number'].toString();
-                    final userRole = snapshot.data['role'].toString();
-                    final userUID = snapshot.data['user_id'].toString();
-                    final userEmail = snapshot.data['name'].toString();
+                    // final userRole = snapshot.data['role'].toString();
+                    // final userUID = snapshot.data['user_id'].toString();
+                    // final userEmail = snapshot.data['name'].toString();
                     final userPhoto = snapshot.data['photoUrl'].toString();
 
                 return Container(
