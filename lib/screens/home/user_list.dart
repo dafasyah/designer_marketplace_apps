@@ -23,6 +23,13 @@ class _UserListState extends State<UserList> {
         .get();
     return reqA.docs;
   }
+   Future<dynamic> getUserByUserId(String userId) async {
+    return (await FirebaseFirestore.instance
+        .collection("user")
+        .where("user_id", isEqualTo: userId)
+        .get()
+    ).docs;
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -128,11 +135,5 @@ class _UserListState extends State<UserList> {
 
   }
 
-  Future<dynamic> getUserByUserId(String userId) async {
-    return (await FirebaseFirestore.instance
-        .collection("user")
-        .where("user_id", isEqualTo: userId)
-        .get()
-    ).docs;
-  }
+ 
 }

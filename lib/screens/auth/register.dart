@@ -28,6 +28,7 @@ class _RegisterState extends State<Register> {
   String fullname = '';
   int phoneNumber = 0;
   String error = '';
+  String photoUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,7 @@ class _RegisterState extends State<Register> {
                 onPressed:  () async {
                   if (_formKey.currentState.validate()){
                     setState(() => loading = true);
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password, fullname, address, phoneNumber);
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password, fullname, address, phoneNumber, photoUrl);
                     if(result == null){
                       setState(() { 
                         error = 'Please enter a valid email';
