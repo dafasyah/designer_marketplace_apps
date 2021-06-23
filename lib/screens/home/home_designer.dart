@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/designer_store.dart';
 import 'package:flutter_application_1/screens/home/designerorder.dart';
-import 'package:flutter_application_1/screens/home/profile_designer.dart';
+import 'package:flutter_application_1/screens/home/profile_designer_update.dart';
 import 'package:flutter_application_1/screens/home/user_list.dart';
 import 'package:flutter_application_1/services/auth.dart';
 import 'package:flutter_application_1/services/database.dart';

@@ -24,7 +24,12 @@ class _RegisterDesignerState extends State<RegisterDesigner> {
   String email = '';
   String password = '';
   String confirmPassword = '';
+  String address = '';
+  String fullname = '';
+  int phoneNumber = 0;
   String error = '';
+  String photoUrl = '';
+  int minimumPrice = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +105,7 @@ class _RegisterDesignerState extends State<RegisterDesigner> {
                 onPressed:  () async {
                   if (_formKey.currentState.validate()){
                     setState(() => loading = true);
-                    dynamic result = await _auth.registerDesignerWithEmailAndPassword(email, password);
+                    dynamic result = await _auth.registerDesignerWithEmailAndPassword(email, password, fullname, address, phoneNumber, photoUrl, minimumPrice);
                     if(result == null){
                       setState(() { 
                         error = 'Please enter a valid email';

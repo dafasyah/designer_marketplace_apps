@@ -1,49 +1,52 @@
-// import 'dart:html';
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_mask/easy_mask.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/services/auth.dart';
-import 'package:flutter_application_1/services/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:toast/toast.dart';
+import 'package:flutter_application_1/services/database.dart';
 
-class ProfileUser extends StatefulWidget {
+
+class DesignerProfileUpdate extends StatefulWidget {
+
   @override
-  _ProfileUserState createState() => _ProfileUserState();
+  _DesignerProfileUpdateState createState() => _DesignerProfileUpdateState();
 }
 
-class _ProfileUserState extends State<ProfileUser> {
+class _DesignerProfileUpdateState extends State<DesignerProfileUpdate> {
   final AuthService _auth = AuthService();
   final _formkey = GlobalKey<FormState>();
 
   final user = FirebaseAuth.instance.currentUser.uid;
 
-  TextEditingController controller;
-
   // File newProfilePic;
   String _imagePath = '';
-  String _userFullName = '';
-  String _userAddress = '';
-  // String _userUID;
-  // String _userEmail;
-  // String _userRole;
-  String _userPhoneNumber = '';
+  // String _designerFullName = '';
+  // String _designerAddress = '';
+  // String _designerPhoneNumber = '';
+  // String _designerMinimumPrice = '';
+
+  TextEditingController _designerFullName = TextEditingController();
+  // TextEditingController _imagePath = TextEditingController();
+  TextEditingController _designerAddress = TextEditingController();
+  TextEditingController _designerPhoneNumber = TextEditingController();
+  TextEditingController _designerMinimumPrice = TextEditingController();
+
+
+
 
   Future<File> getImage() async {
     return await ImagePicker.pickImage(source: ImageSource.gallery);
-    // var tempImage =  await ImagePicker.pickImage(source: ImageSource.gallery);
-    // setState(() {
-    //   imagePath = tempImage;
-    // });
   }
 
 void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
  
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -55,19 +58,24 @@ void showToast(String msg, {int duration, int gravity}) {
                   .doc(snapshot.data.uid)
                   .snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                final userName = snapshot.data['fullname'].toString();
-                final userAddress = snapshot.data['address'].toString();
-                final userPhoneNumber =
-                    snapshot.data['phone_number'].toString();
-                    // final userRole = snapshot.data['role'].toString();
+                final designerName = snapshot.data['fullname'].toString();
+                final designerAddress = snapshot.data['address'].toString();
+                final designerPhoneNumber = snapshot.data['phone_number'].toString();
+                final designerPhoto = snapshot.data['photoUrl'].toString();
+                final designerMinimumPrice = snapshot.data['minimum_price'].toString();
+
+                _designerFullName.text = designerName;
+                _designerAddress.text = designerAddress;
+                _designerPhoneNumber.text = designerPhoneNumber;
+                // _imagePath.value = designerPhoto;
+                _designerMinimumPrice.text = designerMinimumPrice;
+
                     // final userUID = snapshot.data['user_id'].toString();
                     // final userEmail = snapshot.data['name'].toString();
-                    final userPhoto = snapshot.data['photoUrl'].toString();
-
                 return Container(
                   child: Scaffold(
                     resizeToAvoidBottomInset: false,
-                    appBar: AppBar(title: Text("My Profile"), actions: <Widget>[
+                    appBar: AppBar(title: Text("Update Designer Profile"), actions: <Widget>[
                       FlatButton.icon(
                           icon: Icon(Icons.person),
                           label: Text('Log Out'),
@@ -90,7 +98,7 @@ void showToast(String msg, {int duration, int gravity}) {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  (userPhoto != '')
+                                  (designerPhoto != '')
                                       ? Container(
                                           width: 200,
                                           height: 200,
@@ -101,7 +109,7 @@ void showToast(String msg, {int duration, int gravity}) {
                                                   color: Colors.black),
                                               image: DecorationImage(
                                                   image:
-                                                      NetworkImage(userPhoto),
+                                                      NetworkImage(designerPhoto),
                                                   fit: BoxFit.cover)),
                                         )
                                       : Container(
@@ -127,40 +135,57 @@ void showToast(String msg, {int duration, int gravity}) {
                                         setState(() {});
                                       }),
                                   SizedBox(height: 10.0),
-                                  TextFormField(
-                                    key: Key(userName),
-                                    // controller: controller,
+                                  TextField(
+                                    key: Key(designerName),
+                                    controller: _designerFullName,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Full Name',
                                     ),
-                                    initialValue: (userName == '') ? '' : userName,
-                                    onChanged: (val) =>
-                                        setState(() => _userFullName = val),
+                                    // initialValue:  (designerName == '' ) ? '' : designerName,
+                                    // onChanged: (val) =>
+                                    //     setState(() => _designerFullName = val),
                                   ),
                                   SizedBox(height: 10.0),
-                                  TextFormField(
+                                  TextField(
+                                    controller: _designerAddress,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Address',
                                     ),
-                                    initialValue: (userAddress == '') ? '' : userAddress,
-                                    onChanged: (val) =>
-                                        setState(() => _userAddress = val),
+                                    // initialValue: (designerAddress == '') ? '' : designerAddress,
+                                    // onChanged: (val) =>
+                                    //     setState(() => _designerAddress = val),
                                   ),
                                   SizedBox(height: 10.0),
-                                  TextFormField(
+                                  TextField(
+                                    controller: _designerPhoneNumber,
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Phone Number',
                                     ),
-                                    initialValue: (userPhoneNumber == '') ? '' : userPhoneNumber,
+                                    // initialValue: (designerPhoneNumber == '') ? '' : designerPhoneNumber,
                                     inputFormatters: [
                                      TextInputMask(mask: '9999 9999 9999', reverse: false)
                                     ],
-                                    onChanged: (val) => setState(
-                                        () => _userPhoneNumber = val),
+                                    // onChanged: (val) => setState(
+                                    //     () => _designerPhoneNumber = val),
+                                  ),SizedBox(height: 10.0),
+                                  TextField(
+                                    controller: _designerMinimumPrice,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Minimum Price',
+                                    ),
+                                    // initialValue: (designerMinimumPrice == '') ? '' : designerMinimumPrice,
+                                    inputFormatters: [TextInputMask(
+                                      mask: '\R!p!.! !9+.999',
+                                      reverse: true
+                                    )],
+                                    // onChanged: (val) => setState(
+                                    //     () => _designerMinimumPrice = val),
                                   ),
                                   SizedBox(height: 30.0),
                                   ElevatedButton(
@@ -168,10 +193,11 @@ void showToast(String msg, {int duration, int gravity}) {
                                       if (_formkey.currentState.validate()) {
                                         final CollectionReference collectionReference = FirebaseFirestore.instance.collection("user");
                                         collectionReference.doc(user).update({
-                                          'fullname': _userFullName,
-                                          'address': _userAddress,
-                                          'phone_number': _userPhoneNumber, 
-                                          'photoUrl': _imagePath
+                                          'fullname': _designerFullName.text,
+                                          'address': _designerAddress.text,
+                                          'phone_number': _designerPhoneNumber.text, 
+                                          'photoUrl': _imagePath,
+                                          'minimum_price': _designerMinimumPrice.text
                                         });
                                         
                                       }

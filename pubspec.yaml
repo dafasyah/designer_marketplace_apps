@@ -40,6 +40,7 @@ dependencies:
   toast: ^0.1.5
   google_maps_flutter: ^0.5.27+1
   location: ^3.0.2
+  easy_mask: ^1.1.5
   # geolocator: ^4.0.3
   # rxdart: ^0.22.1
 

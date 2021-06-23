@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/designer_store.dart';
-import 'package:flutter_application_1/screens/home/designer_profile.dart';
+import 'package:flutter_application_1/screens/home/designer_profile_view.dart';
 import 'package:flutter_application_1/screens/home/designer_tile.dart';
 import 'package:flutter_application_1/screens/home/user_tile.dart';
 import 'package:provider/provider.dart';

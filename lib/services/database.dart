@@ -40,11 +40,16 @@ class DatabaseService {
     });
   }
 
-  Future updateDesignerData(String name, String role, String uid) async {
+  Future updateDesignerData(String name, String role, String uid, String fullname, String address, int phoneNumber, String photoUrl, int minimumPrice) async {
     return await userCollection.doc(uid).set({
       'name': name,
       'role': role,
-      'user_id' : uid,
+      'designer_id' : uid,
+      'fullname' : fullname,
+      'address' : address,
+      'phone_number' : phoneNumber,
+      'photoUrl' : photoUrl,
+      'minimum_price': minimumPrice
     });
   }
 
