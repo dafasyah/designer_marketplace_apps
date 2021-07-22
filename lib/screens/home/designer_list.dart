@@ -43,7 +43,7 @@ class _ListPageState extends State<ListPage> {
   FutureOr getPost() async {
     var _db = FirebaseFirestore.instance;
     QuerySnapshot reqA =
-        await _db.collection("user").where("role", isEqualTo: 'designer test').get();
+        await _db.collection("user").where("role", isEqualTo: 'designer').get();
     return reqA.docs;
   }
 
@@ -73,7 +73,7 @@ class _ListPageState extends State<ListPage> {
                             title: TextButton(
                               onPressed: () => Get.to(
                                 () => ProfileDesigner(
-                                  userId: snapshot.data[index]['user_id'],
+                                  userId: snapshot.data[index]['designer_id'],
                                 ),
                               ),
                               // Navigator.push(
@@ -120,7 +120,7 @@ class _ListPageState extends State<ListPage> {
                                                       .doc()
                                                       .set({
                                                     'designer_id': snapshot
-                                                        .data[index]['user_id'],
+                                                        .data[index]['designer_id'],
                                                     'designer_name': snapshot
                                                         .data[index]['name'],
                                                     'user_id': FirebaseAuth

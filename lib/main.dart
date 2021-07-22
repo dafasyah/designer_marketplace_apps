@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
                     final user = snapshotUser.data.data();
                     // final designer = snapshotDesigner.data.data();
 
-                    if (user['role'] == 'designer') {
+                    if (user ['role'] == 'designer') {
                       return HomeDesigner();
                     } else {
                       return Home();

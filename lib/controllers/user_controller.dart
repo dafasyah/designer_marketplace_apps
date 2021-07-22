@@ -114,14 +114,14 @@ class UserController extends GetxController {
     }
   }
 
-  addLocation({double lat, lng, String name, String address, String userId}) {
+  addLocation({double lat, lng, String name, String address, String designerId}) {
     CollectionReference location = firestore.collection('location');
     location.add({
       'lat': lat,
       'lng': lng,
       'name': name,
       'address': address,
-      'user_id': userId,
+      'designer_id': designerId,
     });
   }
 

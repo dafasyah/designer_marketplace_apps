@@ -220,7 +220,7 @@ class _DesignerProfileUpdateState extends State<DesignerProfileUpdate> {
                                         address: mapsController
                                             .addressController.text,
                                         name: _designerFullName.text,
-                                        userId: user,
+                                        designerId: user,
                                       );
                                       if (_formkey.currentState.validate()) {
                                         final CollectionReference
