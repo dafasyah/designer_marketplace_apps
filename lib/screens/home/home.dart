@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/designer_store.dart';
 import 'package:flutter_application_1/models/user_store.dart';
 import 'package:flutter_application_1/screens/home/designer_list.dart';
+import 'package:flutter_application_1/screens/home/find_designer.dart';
 import 'package:flutter_application_1/screens/home/find_nearby.dart';
 import 'package:flutter_application_1/screens/home/profile_user.dart';
 import 'package:flutter_application_1/screens/home/settings_forms.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_application_1/screens/home/user_list.dart';
 import 'package:flutter_application_1/screens/home/user_order_list.dart';
 import 'package:flutter_application_1/services/auth.dart';
 import 'package:flutter_application_1/services/database.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
@@ -60,8 +62,11 @@ class Home extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => FindNearby()));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => FindDesigner()));
+                      Get.to(() => FindDesigner());
                     },
                     child: Text('Find Nearby Designer')),
               ),

@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/home/chat_page.dart';
 import 'package:flutter_application_1/screens/home/review_designer.dart';
+import 'package:get/get.dart';
 
 class UserOrder extends StatefulWidget {
   @override
@@ -62,14 +64,25 @@ class _ListPageState extends State<ListPage> {
                 ),
                 trailing: document['status'] == 'On Progress'
                     ? ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => ChatPage(
+                                requestId: document.id,
+                                toId: document['designer_id'],
+                                fromId: FirebaseAuth.instance.currentUser.uid,
+                              ));
+                        },
                         child: Text('Chat'),
                       )
                     : document['status'] == 'Finish'
                         ? ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ReviewDesigner()));
+                              Get.to(() => ReviewDesigner(
+                                    userId: document['designer_id'],
+                                  ));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => ReviewDesigner()));
                             },
                             child: Text('Review'),
                           )

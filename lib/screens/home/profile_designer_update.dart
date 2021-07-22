@@ -1,17 +1,19 @@
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/user.dart';
+import 'package:flutter_application_1/controllers/maps_controller.dart';
+import 'package:flutter_application_1/controllers/user_controller.dart';
+import 'package:flutter_application_1/screens/home/designer_portofolio.dart';
+import 'package:flutter_application_1/screens/home/find_nearby.dart';
 import 'package:flutter_application_1/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:toast/toast.dart';
 import 'package:flutter_application_1/services/database.dart';
 
-
 class DesignerProfileUpdate extends StatefulWidget {
-
   @override
   _DesignerProfileUpdateState createState() => _DesignerProfileUpdateState();
 }
@@ -35,20 +37,21 @@ class _DesignerProfileUpdateState extends State<DesignerProfileUpdate> {
   TextEditingController _designerPhoneNumber = TextEditingController();
   TextEditingController _designerMinimumPrice = TextEditingController();
 
-
-
-
   Future<File> getImage() async {
     return await ImagePicker.pickImage(source: ImageSource.gallery);
   }
 
-void showToast(String msg, {int duration, int gravity}) {
+  void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
- 
 
   @override
   Widget build(BuildContext context) {
+    final mapsController = Get.put(MapsController());
+    final userController = Get.put(UserController());
+    userController.onStart();
+    userController.buildStramPorto();
+
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
@@ -60,9 +63,11 @@ void showToast(String msg, {int duration, int gravity}) {
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 final designerName = snapshot.data['fullname'].toString();
                 final designerAddress = snapshot.data['address'].toString();
-                final designerPhoneNumber = snapshot.data['phone_number'].toString();
+                final designerPhoneNumber =
+                    snapshot.data['phone_number'].toString();
                 final designerPhoto = snapshot.data['photoUrl'].toString();
-                final designerMinimumPrice = snapshot.data['minimum_price'].toString();
+                final designerMinimumPrice =
+                    snapshot.data['minimum_price'].toString();
 
                 _designerFullName.text = designerName;
                 _designerAddress.text = designerAddress;
@@ -70,20 +75,22 @@ void showToast(String msg, {int duration, int gravity}) {
                 // _imagePath.value = designerPhoto;
                 _designerMinimumPrice.text = designerMinimumPrice;
 
-                    // final userUID = snapshot.data['user_id'].toString();
-                    // final userEmail = snapshot.data['name'].toString();
+                // final userUID = snapshot.data['user_id'].toString();
+                // final userEmail = snapshot.data['name'].toString();
                 return Container(
                   child: Scaffold(
                     resizeToAvoidBottomInset: false,
-                    appBar: AppBar(title: Text("Update Designer Profile"), actions: <Widget>[
-                      FlatButton.icon(
-                          icon: Icon(Icons.person),
-                          label: Text('Log Out'),
-                          onPressed: () async {
-                            await _auth.signOut();
-                            Navigator.of(context).pop();
-                          }),
-                    ]),
+                    appBar: AppBar(
+                        title: Text("Update Designer Profile"),
+                        actions: <Widget>[
+                          FlatButton.icon(
+                              icon: Icon(Icons.person),
+                              label: Text('Log Out'),
+                              onPressed: () async {
+                                await _auth.signOut();
+                                Navigator.of(context).pop();
+                              }),
+                        ]),
                     body: Form(
                       key: _formkey,
                       child: SingleChildScrollView(
@@ -108,8 +115,8 @@ void showToast(String msg, {int duration, int gravity}) {
                                               border: Border.all(
                                                   color: Colors.black),
                                               image: DecorationImage(
-                                                  image:
-                                                      NetworkImage(designerPhoto),
+                                                  image: NetworkImage(
+                                                      designerPhoto),
                                                   fit: BoxFit.cover)),
                                         )
                                       : Container(
@@ -148,7 +155,11 @@ void showToast(String msg, {int duration, int gravity}) {
                                   ),
                                   SizedBox(height: 10.0),
                                   TextField(
-                                    controller: _designerAddress,
+                                    onTap: () {
+                                      Get.to(() => FindNearby());
+                                    },
+                                    controller:
+                                        mapsController.addressController,
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       labelText: 'Address',
@@ -167,11 +178,14 @@ void showToast(String msg, {int duration, int gravity}) {
                                     ),
                                     // initialValue: (designerPhoneNumber == '') ? '' : designerPhoneNumber,
                                     inputFormatters: [
-                                     TextInputMask(mask: '9999 9999 9999', reverse: false)
+                                      TextInputMask(
+                                          mask: '9999 9999 9999',
+                                          reverse: false)
                                     ],
                                     // onChanged: (val) => setState(
                                     //     () => _designerPhoneNumber = val),
-                                  ),SizedBox(height: 10.0),
+                                  ),
+                                  SizedBox(height: 10.0),
                                   TextField(
                                     controller: _designerMinimumPrice,
                                     keyboardType: TextInputType.number,
@@ -180,43 +194,143 @@ void showToast(String msg, {int duration, int gravity}) {
                                       labelText: 'Minimum Price',
                                     ),
                                     // initialValue: (designerMinimumPrice == '') ? '' : designerMinimumPrice,
-                                    inputFormatters: [TextInputMask(
-                                      mask: '\R!p!.! !9+.999',
-                                      reverse: true
-                                    )],
+                                    inputFormatters: [
+                                      TextInputMask(
+                                          mask: '\R!p!.! !9+.999',
+                                          reverse: true)
+                                    ],
                                     // onChanged: (val) => setState(
                                     //     () => _designerMinimumPrice = val),
                                   ),
                                   SizedBox(height: 30.0),
                                   ElevatedButton(
                                     onPressed: () async {
+                                      userController.updateUser(
+                                        address: mapsController
+                                            .addressController.text,
+                                        latitude:
+                                            mapsController.latitude.toDouble(),
+                                        longitude:
+                                            mapsController.longitude.toDouble(),
+                                      );
+                                      userController.addLocation(
+                                        lat: mapsController.latitude.toDouble(),
+                                        lng:
+                                            mapsController.longitude.toDouble(),
+                                        address: mapsController
+                                            .addressController.text,
+                                        name: _designerFullName.text,
+                                        userId: user,
+                                      );
                                       if (_formkey.currentState.validate()) {
-                                        final CollectionReference collectionReference = FirebaseFirestore.instance.collection("user");
+                                        final CollectionReference
+                                            collectionReference =
+                                            FirebaseFirestore.instance
+                                                .collection("user");
                                         collectionReference.doc(user).update({
                                           'fullname': _designerFullName.text,
-                                          'address': _designerAddress.text,
-                                          'phone_number': _designerPhoneNumber.text, 
+                                          // 'address': mapsController
+                                          //     .addressController.text,
+                                          'phone_number':
+                                              _designerPhoneNumber.text,
                                           'photoUrl': _imagePath,
-                                          'minimum_price': _designerMinimumPrice.text
+                                          'minimum_price':
+                                              _designerMinimumPrice.text,
+                                          // 'latitude': mapsController.latitude,
+                                          // 'longitude': mapsController.longitude,
                                         });
-                                        
                                       }
 
-                                       showToast('Profile Updated', duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                                      
-                                     
-                                      
+                                      showToast('Profile Updated',
+                                          duration: Toast.LENGTH_LONG,
+                                          gravity: Toast.BOTTOM);
                                     },
                                     child: Text('Save Profile'),
-                                  )
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 24),
+                                    child: Text('My Portofolio'),
+                                  ),
+                                  Obx(
+                                    () => (userController.portofolio.isEmpty)
+                                        ? CircularProgressIndicator()
+                                        : Container(
+                                            height: Get.height,
+                                            child: GridView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemCount: userController
+                                                  .portofolio.length,
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 2),
+                                              itemBuilder: (context, index) =>
+                                                  GestureDetector(
+                                                onTap: () => Get.to(() =>
+                                                    ZoomPortofolio(
+                                                        userController
+                                                            .portofolio[index]
+                                                            .image,
+                                                        userController
+                                                            .portofolio[index]
+                                                            .id)),
+                                                child: Container(
+                                                  margin: EdgeInsets.all(8),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    child: Image.network(
+                                                        userController
+                                                            .portofolio[index]
+                                                            .image,
+                                                        fit: BoxFit.cover),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                  ),
                                 ]),
                           ),
                         ),
                       ),
                     ),
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () {
+                        userController.getImage(ImageSource.gallery);
+                        Get.to(() => DesignerPortofolio());
+                      },
+                      child: Icon(Icons.add_a_photo_rounded),
+                    ),
                   ),
                 );
               });
         });
+  }
+}
+
+class ZoomPortofolio extends GetView<UserController> {
+  final String imageUrl;
+  final String id;
+  final bool isUser;
+  ZoomPortofolio(this.imageUrl, this.id, {this.isUser = false});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+        ),
+      ),
+      floatingActionButton: isUser
+          ? SizedBox()
+          : FloatingActionButton(
+              onPressed: () => controller.deletePortofolio(id),
+              child: Icon(Icons.delete),
+            ),
+    );
   }
 }

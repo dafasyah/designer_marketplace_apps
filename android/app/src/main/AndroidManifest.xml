@@ -12,7 +12,8 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="flutter_application_1"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyAhQdeGkj5x1O1ugTvn3vmDnsm_ZIETSiE"/>
         <activity

@@ -12,6 +12,7 @@ import 'package:flutter_application_1/screens/wrapper_designer.dart';
 import 'package:flutter_application_1/services/auth.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_application_1/shared/loading.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:rxdart/rxdart.dart';
@@ -26,10 +27,9 @@ void main() async {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  
+
 // Stream<DocumentSnapshot> getData() {
 //   Stream stream1 = FirebaseFirestore.instance.collection('user').where('role', isEqualTo: 'type1').snapshots();
 //   Stream stream2 = FirebaseFirestore.instance.collection('designer').where('type', isEqualTo: 'type2').snapshots();
@@ -38,47 +38,46 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-      return MaterialApp(
+    return GetMaterialApp(
       title: 'Designer Apps',
-      
-      home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (ctx, userSnapshot) {
-
-   
-
-        if (userSnapshot.hasData) {
-          
-          return StreamBuilder<DocumentSnapshot>(
-            stream: FirebaseFirestore.instance.collection('user').doc(userSnapshot.data.uid).snapshots(),
-            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotUser){
-              // return StreamBuilder<DocumentSnapshot>(
-              //   stream: FirebaseFirestore.instance.collection("designer").doc(userSnapshot.data.uid).snapshots(),
-              //   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotDesigner)
-                // {
-                  if(snapshotUser.hasData && snapshotUser.data != null ){
-
+      home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (ctx, userSnapshot) {
+            if (userSnapshot.hasData) {
+              return StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('user')
+                    .doc(userSnapshot.data.uid)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshotUser) {
+                  // return StreamBuilder<DocumentSnapshot>(
+                  //   stream: FirebaseFirestore.instance.collection("designer").doc(userSnapshot.data.uid).snapshots(),
+                  //   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotDesigner)
+                  // {
+                  if (snapshotUser.hasData && snapshotUser.data != null) {
                     final user = snapshotUser.data.data();
                     // final designer = snapshotDesigner.data.data();
-                    
-                    if(user ['role'] == 'designer'){
+
+                    if (user['role'] == 'designer') {
                       return HomeDesigner();
-                    }else{
+                    } else {
                       return Home();
                     }
-                  
-                  }else {
+                  } else {
                     return Material(
-                      child: Center(child: CircularProgressIndicator(),),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     );
                   }
-                // }
-              // );
-              
-            },
-          );
-        }
-        return Authenticate();
-      }),
+                  // }
+                  // );
+                },
+              );
+            }
+            return Authenticate();
+          }),
       builder: Loading.init(),
     );
     // final user = Provider.of<User>(context);
@@ -98,7 +97,6 @@ class MyApp extends StatelessWidget {
     //             if(snapshot.hasData && snapshot.data != null){
     //                 final userData = snapshot.data.data;
 
-
     //                 if(userData['role'] == 'designer'){
     //                  return HomeDesigner();
     //                 }
@@ -106,7 +104,6 @@ class MyApp extends StatelessWidget {
     //                   return Home();
     //                 }
 
-                    
     //               }else{
     //                   return Material(
     //                   child: Center(child: CircularProgressIndicator(),),
@@ -117,26 +114,20 @@ class MyApp extends StatelessWidget {
     //         }
     //         return Authenticate();
     //       }),
-    //       builder: (context, state) 
+    //       builder: (context, state)
     //           {
     //             return Authenticate();
     //           }
-          
+
     //   )
     // );
-    
-      // return StreamProvider<Designer>.value(
-      //       value: AuthService().designer,
-      //           child: MaterialApp(
-      //       home: WrapperDesigner(),
-      //       ),
-      //     );
-      // 
-    
+
+    // return StreamProvider<Designer>.value(
+    //       value: AuthService().designer,
+    //           child: MaterialApp(
+    //       home: WrapperDesigner(),
+    //       ),
+    //     );
+    //
   }
-
-
 }
-
-
-

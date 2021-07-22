@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/home/user_profile.dart';
+import 'package:get/get.dart';
+
+import 'chat_page.dart';
 
 class DesignerOrder extends StatefulWidget {
   @override
@@ -89,6 +92,9 @@ class _ListPageState extends State<ListPage> {
                       child: ListView.builder(
                           itemCount: snapshot.data.length,
                           itemBuilder: (_, index) {
+                            var requestId = snapshot.data[index].id;
+                            var fromId = snapshot.data[index]['designer_id'];
+                            var toId = snapshot.data[index]['user_id'];
                             return ListTile(
                               // isThreeLine: true,
                               title:
@@ -115,17 +121,20 @@ class _ListPageState extends State<ListPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   TextButton(
-                                     onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfileUserDisplay())),
-                            child: Row(
-                              children: <Widget>[
-                                Text(snapshot.data[index]['user_name'])
-                              ],
-                            ),
-                                    // snapshot.data[index]['user_name']
+                                    onPressed: () => Get.to(
+                                        () => ProfileUserDisplay(userId: toId)),
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             ProfileUserDisplay())),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(snapshot.data[index]['user_name'])
+                                      ],
                                     ),
+                                    // snapshot.data[index]['user_name']
+                                  ),
                                   Text(
                                     'Status : ' +
                                         snapshot.data[index]['status'],
@@ -171,7 +180,15 @@ class _ListPageState extends State<ListPage> {
                                             child: Row(children: [
                                               Expanded(
                                                 child: ElevatedButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      Get.to(
+                                                        () => ChatPage(
+                                                          requestId: requestId,
+                                                          fromId: fromId,
+                                                          toId: toId,
+                                                        ),
+                                                      );
+                                                    },
                                                     child: Text('Chat')),
                                               ),
                                               SizedBox(

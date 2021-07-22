@@ -7,6 +7,7 @@ import 'package:flutter_application_1/models/designer_store.dart';
 import 'package:flutter_application_1/screens/home/designer_profile_view.dart';
 import 'package:flutter_application_1/screens/home/designer_tile.dart';
 import 'package:flutter_application_1/screens/home/user_tile.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class DesignerList extends StatefulWidget {
@@ -42,7 +43,7 @@ class _ListPageState extends State<ListPage> {
   FutureOr getPost() async {
     var _db = FirebaseFirestore.instance;
     QuerySnapshot reqA =
-        await _db.collection("user").where("role", isEqualTo: 'designer').get();
+        await _db.collection("user").where("role", isEqualTo: 'designer test').get();
     return reqA.docs;
   }
 
@@ -69,12 +70,16 @@ class _ListPageState extends State<ListPage> {
                         Card(
                           margin: const EdgeInsets.all(10),
                           child: ListTile(
-                            
                             title: TextButton(
-                              onPressed: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProfileDesigner())),
+                              onPressed: () => Get.to(
+                                () => ProfileDesigner(
+                                  userId: snapshot.data[index]['user_id'],
+                                ),
+                              ),
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => ProfileDesigner())),
                               child: Row(
                                 children: <Widget>[
                                   Text(snapshot.data[index]['name'])
