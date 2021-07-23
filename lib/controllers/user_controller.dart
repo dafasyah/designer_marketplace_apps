@@ -14,7 +14,7 @@ class UserController extends GetxController {
       FirebaseFirestore.instance.collection('user');
   final user = FirebaseAuth.instance.currentUser.uid;
   final ratingController = TextEditingController();
-  RxList<Users> users = <Users>[].obs;
+  RxList<Location> locations = <Location>[].obs;
   Rx<Users> currentUser = Users().obs;
   RxList<Portofolio> portofolio = <Portofolio>[].obs;
   var selectedImagePath = ''.obs;
@@ -23,22 +23,18 @@ class UserController extends GetxController {
   String image =
       'https://i.pinimg.com/originals/a8/33/04/a833045c828009d7e4d68f214ac13aad.jpg';
 
-  buildStream() => users.bindStream(listDesigner());
+  buildStream() => locations.bindStream(listDesigner());
   buildStramPorto({String id, bool isUser = false}) =>
       portofolio.bindStream(listPortofolio(id: id, isUser: isUser));
 
-  Stream<List<Users>> listDesigner() {
-    Stream<QuerySnapshot> stream = firestore
-        .collection('user')
-        .where('role', isEqualTo: 'designer test')
-        .snapshots();
+  Stream<List<Location>> listDesigner() {
+    Stream<QuerySnapshot> stream = firestore.collection('location').snapshots();
     return stream.map((event) => event.docs
-        .map((e) => Users(
+        .map((e) => Location(
               name: e.data()['name'],
               address: e.data()['address'],
-              lat: e.data()['latitude'],
-              lng: e.data()['longitude'],
-              profile: e.data()['photoUrl'],
+              lat: e.data()['lat'],
+              lng: e.data()['lng'],
             ))
         .toList());
   }
@@ -94,9 +90,10 @@ class UserController extends GetxController {
     Get.back();
   }
 
-  addRating(String id, double rating) {
+  addRating(String id, double rating, String requestId) {
     CollectionReference portofolio =
         firestore.collection('user').doc(id).collection('rating');
+    CollectionReference request = firestore.collection('request_designer');
     try {
       isLoading.toggle();
       portofolio.add({
@@ -104,6 +101,9 @@ class UserController extends GetxController {
         'rating': '$rating',
         'text': ratingController.text,
         'time_stamp': DateTime.now().millisecondsSinceEpoch,
+      });
+      request.doc(requestId).update({
+        'status' : 'Reviewed'
       });
     } catch (e) {
       print(e);
@@ -114,7 +114,8 @@ class UserController extends GetxController {
     }
   }
 
-  addLocation({double lat, lng, String name, String address, String designerId}) {
+  addLocation(
+      {double lat, lng, String name, String address, String designerId}) {
     CollectionReference location = firestore.collection('location');
     location.add({
       'lat': lat,

@@ -5,7 +5,8 @@ import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ReviewDesigner extends StatefulWidget {
   final String userId;
-  ReviewDesigner({this.userId});
+  final String requestId;
+  ReviewDesigner({this.userId, this.requestId});
   @override
   _ReviewDesignerState createState() => _ReviewDesignerState();
 }
@@ -83,7 +84,7 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
                   : Container(
                       child: ElevatedButton(
                           onPressed: () {
-                            userController.addRating(widget.userId, rating);
+                            userController.addRating(widget.userId, rating, widget.requestId);
                           },
                           child: Text('Finish')),
                     ))

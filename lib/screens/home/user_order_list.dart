@@ -78,6 +78,7 @@ class _ListPageState extends State<ListPage> {
                             onPressed: () {
                               Get.to(() => ReviewDesigner(
                                     userId: document['designer_id'],
+                                    requestId: document.id,
                                   ));
                               // Navigator.push(
                               //     context,
@@ -86,7 +87,7 @@ class _ListPageState extends State<ListPage> {
                             },
                             child: Text('Review'),
                           )
-                        : null,
+                        : SizedBox(),
               );
             }).toList(),
           );

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/user_controller.dart';
 import 'package:flutter_application_1/models/designer_store.dart';
 import 'package:flutter_application_1/models/user_store.dart';
 import 'package:flutter_application_1/screens/home/designer_list.dart';
@@ -28,6 +29,7 @@ class Home extends StatelessWidget {
     //     );
     //   });
     // }
+    Get.put(UserController());
 
     return StreamProvider<List<DesignerStore>>.value(
       value: DatabaseService().designerstore,

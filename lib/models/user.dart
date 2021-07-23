@@ -29,3 +29,12 @@ class Portofolio {
   int time;
   Portofolio({this.image, this.time, this.id});
 }
+
+class Location {
+  String address;
+  String designerId;
+  double lat;
+  double lng;
+  String name;
+  Location({this.address, this.designerId, this.lat, this.lng, this.name});
+}
