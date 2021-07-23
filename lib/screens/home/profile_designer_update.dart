@@ -1,312 +1,115 @@
-import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controllers/maps_controller.dart';
 import 'package:flutter_application_1/controllers/user_controller.dart';
-import 'package:flutter_application_1/screens/home/designer_portofolio.dart';
-import 'package:flutter_application_1/screens/home/find_nearby.dart';
-import 'package:flutter_application_1/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_application_1/screens/home/profile_designer_form.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import 'package:toast/toast.dart';
-import 'package:flutter_application_1/services/database.dart';
 
-class DesignerProfileUpdate extends StatefulWidget {
-  @override
-  _DesignerProfileUpdateState createState() => _DesignerProfileUpdateState();
-}
-
-class _DesignerProfileUpdateState extends State<DesignerProfileUpdate> {
-  final AuthService _auth = AuthService();
-  final _formkey = GlobalKey<FormState>();
-
+class DesignerProfileUpdate extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser.uid;
-
-  // File newProfilePic;
-  String _imagePath = '';
-  // String _designerFullName = '';
-  // String _designerAddress = '';
-  // String _designerPhoneNumber = '';
-  // String _designerMinimumPrice = '';
-
-  TextEditingController _designerFullName = TextEditingController();
-  // TextEditingController _imagePath = TextEditingController();
-  TextEditingController _designerAddress = TextEditingController();
-  TextEditingController _designerPhoneNumber = TextEditingController();
-  TextEditingController _designerMinimumPrice = TextEditingController();
-
-  Future<File> getImage() async {
-    return await ImagePicker.pickImage(source: ImageSource.gallery);
-  }
-
-  void showToast(String msg, {int duration, int gravity}) {
-    Toast.show(msg, context, duration: duration, gravity: gravity);
-  }
 
   @override
   Widget build(BuildContext context) {
-    final mapsController = Get.put(MapsController());
-    final userController = Get.put(UserController());
-    userController.onStart();
-    userController.buildStramPorto();
-
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          return StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('user')
-                  .doc(snapshot.data.uid)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                final designerName = snapshot.data['fullname'].toString();
-                final designerAddress = snapshot.data['address'].toString();
-                final designerPhoneNumber =
-                    snapshot.data['phone_number'].toString();
-                final designerPhoto = snapshot.data['photoUrl'].toString();
-                final designerMinimumPrice =
-                    snapshot.data['minimum_price'].toString();
-
-                _designerFullName.text = designerName;
-                _designerAddress.text = designerAddress;
-                _designerPhoneNumber.text = designerPhoneNumber;
-                // _imagePath.value = designerPhoto;
-                _designerMinimumPrice.text = designerMinimumPrice;
-
-                // final userUID = snapshot.data['user_id'].toString();
-                // final userEmail = snapshot.data['name'].toString();
-                return Container(
-                  child: Scaffold(
-                    resizeToAvoidBottomInset: false,
-                    appBar: AppBar(
-                        title: Text("Update Designer Profile"),
-                        actions: <Widget>[
-                          FlatButton.icon(
-                              icon: Icon(Icons.person),
-                              label: Text('Log Out'),
-                              onPressed: () async {
-                                await _auth.signOut();
-                                Navigator.of(context).pop();
-                              }),
-                        ]),
-                    body: Form(
-                      key: _formkey,
-                      child: SingleChildScrollView(
-                        // physics: ClampingScrollPhysics(),
-                        reverse: true,
-                        child: Container(
-                          margin: EdgeInsets.all(20),
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  (designerPhoto != '')
-                                      ? Container(
-                                          width: 200,
-                                          height: 200,
-                                          // padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                  color: Colors.black),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      designerPhoto),
-                                                  fit: BoxFit.cover)),
-                                        )
-                                      : Container(
-                                          width: 200,
-                                          height: 200,
-                                          // padding: const EdgeInsets.all(10),
-                                          child: Expanded(
-                                            child: Icon(
-                                              Icons.account_circle_rounded,
-                                              size: 200,
-                                            ),
-                                          ),
-                                        ),
-                                  RaisedButton(
-                                      child: Text('Change Profile Picture'),
-                                      onPressed: () async {
-                                        File file = await getImage();
-
-                                        _imagePath =
-                                            await DatabaseService.uploadImage(
-                                                file);
-
-                                        setState(() {});
-                                      }),
-                                  SizedBox(height: 10.0),
-                                  TextField(
-                                    key: Key(designerName),
-                                    controller: _designerFullName,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Full Name',
-                                    ),
-                                    // initialValue:  (designerName == '' ) ? '' : designerName,
-                                    // onChanged: (val) =>
-                                    //     setState(() => _designerFullName = val),
-                                  ),
-                                  SizedBox(height: 10.0),
-                                  TextField(
-                                    onTap: () {
-                                      Get.to(() => FindNearby());
-                                    },
-                                    controller:
-                                        mapsController.addressController,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Address',
-                                    ),
-                                    // initialValue: (designerAddress == '') ? '' : designerAddress,
-                                    // onChanged: (val) =>
-                                    //     setState(() => _designerAddress = val),
-                                  ),
-                                  SizedBox(height: 10.0),
-                                  TextField(
-                                    controller: _designerPhoneNumber,
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Phone Number',
-                                    ),
-                                    // initialValue: (designerPhoneNumber == '') ? '' : designerPhoneNumber,
-                                    inputFormatters: [
-                                      TextInputMask(
-                                          mask: '9999 9999 9999',
-                                          reverse: false)
-                                    ],
-                                    // onChanged: (val) => setState(
-                                    //     () => _designerPhoneNumber = val),
-                                  ),
-                                  SizedBox(height: 10.0),
-                                  TextField(
-                                    controller: _designerMinimumPrice,
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Minimum Price',
-                                    ),
-                                    // initialValue: (designerMinimumPrice == '') ? '' : designerMinimumPrice,
-                                    inputFormatters: [
-                                      TextInputMask(
-                                          mask: '\R!p!.! !9+.999',
-                                          reverse: true)
-                                    ],
-                                    // onChanged: (val) => setState(
-                                    //     () => _designerMinimumPrice = val),
-                                  ),
-                                  SizedBox(height: 30.0),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      userController.updateUser(
-                                        address: mapsController
-                                            .addressController.text,
-                                        latitude:
-                                            mapsController.latitude.toDouble(),
-                                        longitude:
-                                            mapsController.longitude.toDouble(),
-                                      );
-                                      userController.addLocation(
-                                        lat: mapsController.latitude.toDouble(),
-                                        lng:
-                                            mapsController.longitude.toDouble(),
-                                        address: mapsController
-                                            .addressController.text,
-                                        name: _designerFullName.text,
-                                        designerId: user,
-                                      );
-                                      if (_formkey.currentState.validate()) {
-                                        final CollectionReference
-                                            collectionReference =
-                                            FirebaseFirestore.instance
-                                                .collection("user");
-                                        collectionReference.doc(user).update({
-                                          'fullname': _designerFullName.text,
-                                          // 'address': mapsController
-                                          //     .addressController.text,
-                                          'phone_number':
-                                              _designerPhoneNumber.text,
-                                          'photoUrl': _imagePath,
-                                          'minimum_price':
-                                              _designerMinimumPrice.text,
-                                          // 'latitude': mapsController.latitude,
-                                          // 'longitude': mapsController.longitude,
-                                        });
-                                      }
-
-                                      showToast('Profile Updated',
-                                          duration: Toast.LENGTH_LONG,
-                                          gravity: Toast.BOTTOM);
-                                    },
-                                    child: Text('Save Profile'),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 24),
-                                    child: Text('My Portofolio'),
-                                  ),
-                                  Obx(
-                                    () => (userController.portofolio.isEmpty)
-                                        ? CircularProgressIndicator()
-                                        : Container(
-                                            height: Get.height,
-                                            child: GridView.builder(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              itemCount: userController
-                                                  .portofolio.length,
-                                              gridDelegate:
-                                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: 2),
-                                              itemBuilder: (context, index) =>
-                                                  GestureDetector(
-                                                onTap: () => Get.to(() =>
-                                                    ZoomPortofolio(
-                                                        userController
-                                                            .portofolio[index]
-                                                            .image,
-                                                        userController
-                                                            .portofolio[index]
-                                                            .id)),
-                                                child: Container(
-                                                  margin: EdgeInsets.all(8),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    child: Image.network(
-                                                        userController
-                                                            .portofolio[index]
-                                                            .image,
-                                                        fit: BoxFit.cover),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                  ),
-                                ]),
-                          ),
-                        ),
+    final userController = Get.find<UserController>();
+    userController.buildStramPorto(id: user, isUser: true);
+    userController.getCurrentUser(user);
+    return Container(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Designer Profile'),
+        ),
+        body: Obx(
+          () => (userController.currentUser.value.name == null)
+              ? Center(child: CircularProgressIndicator())
+              : ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: userController.currentUser.value.profile == ""
+                          ? Icon(Icons.person, size: 65)
+                          : CircleAvatar(
+                              radius: 65,
+                              backgroundImage: NetworkImage(
+                                  userController.currentUser.value.profile),
+                            ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(userController.currentUser.value.name,
+                          textAlign: TextAlign.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(userController.currentUser.value.address,
+                          textAlign: TextAlign.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(userController.currentUser.value.phone,
+                          textAlign: TextAlign.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(
+                          userController.currentUser.value.minimumPrice
+                              .toString(),
+                          textAlign: TextAlign.center),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Get.to(() => ProfileDesignerForm());
+                        },
+                        child: Text('Update Profile'),
                       ),
                     ),
-                    floatingActionButton: FloatingActionButton(
-                      onPressed: () {
-                        userController.getImage(ImageSource.gallery);
-                        Get.to(() => DesignerPortofolio());
-                      },
-                      child: Icon(Icons.add_a_photo_rounded),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                        'Portofolio',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                );
-              });
-        });
+                    (userController.portofolio.isEmpty)
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 80),
+                            child: Text('Tidak ada portofolio',
+                                textAlign: TextAlign.center),
+                          )
+                        : Container(
+                            height: Get.height,
+                            child: GridView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: userController.portofolio.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2),
+                              itemBuilder: (context, index) => GestureDetector(
+                                onTap: () => Get.to(
+                                  () => ZoomPortofolio(
+                                    userController.portofolio[index].image,
+                                    userController.portofolio[index].id,
+                                    isUser: true,
+                                  ),
+                                ),
+                                child: Container(
+                                  margin: EdgeInsets.all(8),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.network(
+                                        userController.portofolio[index].image,
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                  ],
+                ),
+        ),
+      ),
+    );
   }
 }
 

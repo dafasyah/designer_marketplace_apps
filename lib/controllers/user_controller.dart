@@ -102,9 +102,7 @@ class UserController extends GetxController {
         'text': ratingController.text,
         'time_stamp': DateTime.now().millisecondsSinceEpoch,
       });
-      request.doc(requestId).update({
-        'status' : 'Reviewed'
-      });
+      request.doc(requestId).update({'status': 'Reviewed'});
     } catch (e) {
       print(e);
     } finally {
@@ -133,6 +131,7 @@ class UserController extends GetxController {
       val.address = snapshot.data()['address'];
       val.profile = snapshot.data()['photoUrl'];
       val.phone = snapshot.data()['phone_number'];
+      val.minimumPrice = snapshot.data()['minimum_price'];
     });
   }
 
