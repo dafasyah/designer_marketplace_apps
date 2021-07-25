@@ -40,7 +40,44 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Designer Apps',
-      home: CheckingPage(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, userSnapshot) {
+          if (userSnapshot.hasData) {
+            return StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('user')
+                  .doc(userSnapshot.data.uid)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshotUser) {
+                // return StreamBuilder<DocumentSnapshot>(
+                //   stream: FirebaseFirestore.instance.collection("designer").doc(userSnapshot.data.uid).snapshots(),
+                //   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotDesigner)
+                // {
+                if (snapshotUser.hasData && snapshotUser.data != null) {
+                  final user = snapshotUser.data.data();
+                  // final designer = snapshotDesigner.data.data();
+
+                  if (user['role'] == 'designer') {
+                    return HomeDesigner();
+                  } else {
+                    return Home();
+                  }
+                } else {
+                  return Material(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+                // }
+                // );
+              },
+            );
+          }
+          return Authenticate();
+        }),
       builder: Loading.init(),
     );
     // final user = Provider.of<User>(context);
@@ -92,49 +129,5 @@ class MyApp extends StatelessWidget {
     //       ),
     //     );
     //
-  }
-}
-
-class CheckingPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (ctx, userSnapshot) {
-          if (userSnapshot.hasData) {
-            return StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('user')
-                  .doc(userSnapshot.data.uid)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<DocumentSnapshot> snapshotUser) {
-                // return StreamBuilder<DocumentSnapshot>(
-                //   stream: FirebaseFirestore.instance.collection("designer").doc(userSnapshot.data.uid).snapshots(),
-                //   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotDesigner)
-                // {
-                if (snapshotUser.hasData && snapshotUser.data != null) {
-                  final user = snapshotUser.data.data();
-                  // final designer = snapshotDesigner.data.data();
-
-                  if (user['role'] == 'designer') {
-                    return HomeDesigner();
-                  } else {
-                    return Home();
-                  }
-                } else {
-                  return Material(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-                // }
-                // );
-              },
-            );
-          }
-          return Authenticate();
-        });
   }
 }

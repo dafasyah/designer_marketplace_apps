@@ -51,6 +51,7 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
   Widget build(BuildContext context) {
     final mapsController = Get.put(MapsController());
     final userController = Get.find<UserController>();
+    final user = FirebaseAuth.instance.currentUser.uid;
 
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -240,7 +241,7 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                           // 'longitude': mapsController.longitude,
                                         });
                                       }
-
+                                      userController.getCurrentUser(user);
                                       showToast('Profile Updated',
                                           duration: Toast.LENGTH_LONG,
                                           gravity: Toast.BOTTOM);

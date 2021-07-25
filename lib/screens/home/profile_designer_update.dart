@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/screens/home/designer_portofolio.dart';
 import 'package:flutter_application_1/screens/home/profile_designer_form.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DesignerProfileUpdate extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser.uid;
@@ -108,6 +110,13 @@ class DesignerProfileUpdate extends StatelessWidget {
                   ],
                 ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            userController.getImage(ImageSource.gallery);
+            Get.to(() => DesignerPortofolio());
+          },
+          child: Icon(Icons.add_a_photo_rounded),
+        ),
       ),
     );
   }
@@ -129,11 +138,11 @@ class ZoomPortofolio extends GetView<UserController> {
         ),
       ),
       floatingActionButton: isUser
-          ? SizedBox()
-          : FloatingActionButton(
+          ? FloatingActionButton(
               onPressed: () => controller.deletePortofolio(id),
               child: Icon(Icons.delete),
-            ),
+            )
+          : SizedBox(),
     );
   }
 }
