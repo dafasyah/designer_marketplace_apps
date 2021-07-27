@@ -7,6 +7,7 @@ import 'package:flutter_application_1/models/user_store.dart';
 import 'package:flutter_application_1/screens/home/home_designer.dart';
 import 'package:flutter_application_1/screens/home/user_tile.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class UserList extends StatefulWidget {
   @override
@@ -30,6 +31,11 @@ class _UserListState extends State<UserList> {
         .get()
     ).docs;
   }
+
+   void showToast(String msg, {int duration, int gravity}) {
+    Toast.show(msg, context, duration: duration, gravity: gravity);
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -85,6 +91,8 @@ class _UserListState extends State<UserList> {
                                               });
                                               setState(() {
                                                 Navigator.popUntil(context, ModalRoute.withName("/"));
+                                                showToast('Request Accepted', gravity: Toast.BOTTOM);
+
                                               });
                                             })
                                       ],
@@ -114,6 +122,8 @@ class _UserListState extends State<UserList> {
                                               });
                                               setState(() {
                                                 Navigator.popUntil(context, ModalRoute.withName("/"));
+                                                showToast('Request Rejected', duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+
                                               });
                                             })
                                       ],

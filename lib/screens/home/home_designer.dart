@@ -18,10 +18,10 @@ class HomeDesigner extends StatelessWidget {
     return StreamProvider<List<DesignerStore>>.value(
       value: DatabaseService().designerstore,
       child: Scaffold(
-        backgroundColor: Colors.brown[50],
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('Designer Home'),
-          backgroundColor: Colors.brown[400],
+          backgroundColor: Colors.blue,
           elevation: 0.0,
           actions: <Widget>[
             FlatButton.icon(

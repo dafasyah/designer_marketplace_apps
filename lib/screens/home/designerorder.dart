@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/home/user_profile.dart';
 import 'package:get/get.dart';
-
 import 'chat_page.dart';
 
 class DesignerOrder extends StatefulWidget {
@@ -15,12 +14,15 @@ class DesignerOrder extends StatefulWidget {
 }
 
 class _DesignerOrder extends State<DesignerOrder> {
+  
+ 
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.brown[400],
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.blue,
         title: Row(
           children: <Widget>[
             Text(

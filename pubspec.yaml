@@ -43,6 +43,7 @@ dependencies:
   easy_mask: ^1.1.5
   get: ^3.26.0
   geocoder: ^0.2.1
+  dcdg: ^2.0.1
   # geolocator: ^4.0.3
   # rxdart: ^0.22.1
 

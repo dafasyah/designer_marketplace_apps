@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/designer_store.dart';
-import 'package:flutter_application_1/screens/home/settings_forms.dart';
 
 
 class DesignerTile extends StatelessWidget {

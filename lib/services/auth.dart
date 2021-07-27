@@ -107,7 +107,7 @@ class AuthService{
 
   //register email n pass designer
 
-  Future registerDesignerWithEmailAndPassword(String email, String password, String fullname, String address, int phoneNumber, String photoUrl, int minimumPrice) async {
+  Future registerDesignerWithEmailAndPassword(String email, String password, String fullname, String address, String phoneNumber, String photoUrl, String minimumPrice) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User designer = result.user;

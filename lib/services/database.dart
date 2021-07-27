@@ -40,7 +40,7 @@ class DatabaseService {
     });
   }
 
-  Future updateDesignerData(String name, String role, String uid, String fullname, String address, int phoneNumber, String photoUrl, int minimumPrice) async {
+  Future updateDesignerData(String name, String role, String uid, String fullname, String address, String phoneNumber, String photoUrl, String minimumPrice) async {
     return await userCollection.doc(uid).set({
       'name': name,
       'role': role,

@@ -27,9 +27,9 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
+        backgroundColor: Colors.blue,
         elevation: 0.0,
         title: Text('Sign In'),
         actions: <Widget>[
@@ -69,7 +69,7 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 20.0),
               RaisedButton(
-                color: Colors.pink[400],
+                color: Colors.blue,
                 child: Text('Sign In',
                 style: TextStyle(color:Colors.white),
                 ),

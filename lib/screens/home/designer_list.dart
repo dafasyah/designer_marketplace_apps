@@ -29,17 +29,17 @@ class _DesignerListState extends State<DesignerList> {
       //     style: TextStyle(color: Colors.black),
       //   )),
       // ),
-      body: ListPage(),
+      body: ListPageDesigner(),
     );
   }
 }
 
-class ListPage extends StatefulWidget {
+class ListPageDesigner extends StatefulWidget {
   @override
-  _ListPageState createState() => _ListPageState();
+  _ListPageDesignerState createState() => _ListPageDesignerState();
 }
 
-class _ListPageState extends State<ListPage> {
+class _ListPageDesignerState extends State<ListPageDesigner> {
   FutureOr getPost() async {
     var _db = FirebaseFirestore.instance;
     QuerySnapshot reqA =
@@ -82,7 +82,7 @@ class _ListPageState extends State<ListPage> {
                               //         builder: (context) => ProfileDesigner())),
                               child: Row(
                                 children: <Widget>[
-                                  Text(snapshot.data[index]['name'])
+                                   Text(snapshot.data[index]['name'])
                                 ],
                               ),
                             ),

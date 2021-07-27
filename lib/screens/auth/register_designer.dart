@@ -24,19 +24,19 @@ class _RegisterDesignerState extends State<RegisterDesigner> {
   String email = '';
   String password = '';
   String confirmPassword = '';
-  String address = '';
-  String fullname = '';
-  int phoneNumber = 0;
+  String address = 'NO ADDRESS';
+  String fullname = 'NO NAME';
+  String phoneNumber = '0';
   String error = '';
   String photoUrl = '';
-  int minimumPrice = 0;
+  String minimumPrice = '0';
 
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
+        backgroundColor: Colors.blue,
         elevation: 0.0,
         title: Text('Sign Up as Designer'),
         // actions: <Widget>[
@@ -98,7 +98,7 @@ class _RegisterDesignerState extends State<RegisterDesigner> {
                 style: TextStyle(color: Colors.red, fontSize: 14.0)
               ),
               RaisedButton(
-                color: Colors.pink[400],
+                color: Colors.blue,
                 child: Text('Sign Up as Designer',
                 style: TextStyle(color:Colors.white),
                 ),

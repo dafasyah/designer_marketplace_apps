@@ -7,12 +7,12 @@ const textInputDecoration =
                   filled: true,
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide( 
-                    color: Colors.white,
+                    color: Colors.grey,
                     width: 2.0),
                    ), 
                    focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide( 
-                    color: Colors.pink,
+                    color: Colors.blue,
                     width: 2.0),
                    ),
                 );

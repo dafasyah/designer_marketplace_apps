@@ -8,7 +8,6 @@ import 'package:flutter_application_1/screens/home/designer_list.dart';
 import 'package:flutter_application_1/screens/home/find_designer.dart';
 import 'package:flutter_application_1/screens/home/find_nearby.dart';
 import 'package:flutter_application_1/screens/home/profile_user.dart';
-import 'package:flutter_application_1/screens/home/settings_forms.dart';
 import 'package:flutter_application_1/screens/home/user_list.dart';
 import 'package:flutter_application_1/screens/home/user_order_list.dart';
 import 'package:flutter_application_1/services/auth.dart';
@@ -17,7 +16,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
-  final AuthService _auth = AuthService();
+  // final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class Home extends StatelessWidget {
         // backgroundColor: Colors.brown[50],
         appBar: AppBar(
           title: Text('User Home'),
-          backgroundColor: Colors.brown[400],
+          backgroundColor: Colors.blue,
           elevation: 0.0,
           actions: <Widget>[
             //  FlatButton.icon(

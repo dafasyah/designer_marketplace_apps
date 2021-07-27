@@ -15,6 +15,8 @@ import 'package:flutter_application_1/shared/loading.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:dcdg/dcdg.dart';
+
 // import 'package:rxdart/rxdart.dart';
 
 // void main() {

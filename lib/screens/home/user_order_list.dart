@@ -16,8 +16,8 @@ class _UserOrder extends State<UserOrder> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.brown[400],
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Colors.blue,
         title: Row(
           children: <Widget>[
             Text(
