@@ -176,7 +176,7 @@ class FindDesignerState extends State<FindDesigner> {
     );
   }
 
-  Widget _boxes(double lat, double long, String restaurantName) {
+  Widget _boxes(double lat, double long, String name) {
     return GestureDetector(
       onTap: () {
         _gotoLocation(lat, long);
@@ -206,7 +206,7 @@ class FindDesignerState extends State<FindDesigner> {
             Expanded(
                 child: Padding(
               padding: EdgeInsets.only(top: 8, left: 8),
-              child: Text(restaurantName),
+              child: Text(name == '' ? 'Designer' : name),
             ))
           ],
         ),

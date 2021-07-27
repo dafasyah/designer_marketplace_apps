@@ -3,11 +3,13 @@ import 'package:flutter_application_1/controllers/user_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/screens/home/designer_portofolio.dart';
 import 'package:flutter_application_1/screens/home/profile_designer_form.dart';
+import 'package:flutter_application_1/services/auth.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class DesignerProfileUpdate extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser.uid;
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +18,15 @@ class DesignerProfileUpdate extends StatelessWidget {
     userController.getCurrentUser(user);
     return Container(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Designer Profile'),
-        ),
+        appBar: AppBar(title: Text('Designer Profile'), actions: <Widget>[
+          FlatButton.icon(
+              icon: Icon(Icons.person),
+              label: Text('Log Out'),
+              onPressed: () async {
+                await _auth.signOut();
+                Navigator.of(context).pop();
+              }),
+        ]),
         body: Obx(
           () => (userController.currentUser.value.name == null)
               ? Center(child: CircularProgressIndicator())
@@ -36,17 +44,17 @@ class DesignerProfileUpdate extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text(userController.currentUser.value.name,
+                      child: Text(userController.currentUser.value.name??'',
                           textAlign: TextAlign.center),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text(userController.currentUser.value.address,
+                      child: Text(userController.currentUser.value.address??'',
                           textAlign: TextAlign.center),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text(userController.currentUser.value.phone,
+                      child: Text(userController.currentUser.value.phone??'',
                           textAlign: TextAlign.center),
                     ),
                     Padding(

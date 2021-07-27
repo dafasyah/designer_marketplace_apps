@@ -40,10 +40,10 @@ class _ProfileUserState extends State<ProfileUser> {
     // });
   }
 
-void showToast(String msg, {int duration, int gravity}) {
+  void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -55,14 +55,14 @@ void showToast(String msg, {int duration, int gravity}) {
                   .doc(snapshot.data.uid)
                   .snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                final userName = snapshot.data['fullname'].toString();
+                final userName = snapshot.data['fullname'];
                 final userAddress = snapshot.data['address'].toString();
                 final userPhoneNumber =
                     snapshot.data['phone_number'].toString();
-                    // final userRole = snapshot.data['role'].toString();
-                    // final userUID = snapshot.data['user_id'].toString();
-                    // final userEmail = snapshot.data['name'].toString();
-                    final userPhoto = snapshot.data['photoUrl'].toString();
+                // final userRole = snapshot.data['role'].toString();
+                // final userUID = snapshot.data['user_id'].toString();
+                // final userEmail = snapshot.data['name'].toString();
+                final userPhoto = snapshot.data['photoUrl'].toString();
 
                 return Container(
                   child: Scaffold(
@@ -134,7 +134,8 @@ void showToast(String msg, {int duration, int gravity}) {
                                       border: OutlineInputBorder(),
                                       labelText: 'Full Name',
                                     ),
-                                    initialValue: (userName == '') ? '' : userName,
+                                    initialValue:
+                                        (userName == '') ? '' : userName,
                                     onChanged: (val) =>
                                         setState(() => _userFullName = val),
                                   ),
@@ -144,7 +145,8 @@ void showToast(String msg, {int duration, int gravity}) {
                                       border: OutlineInputBorder(),
                                       labelText: 'Address',
                                     ),
-                                    initialValue: (userAddress == '') ? '' : userAddress,
+                                    initialValue:
+                                        (userAddress == '') ? '' : userAddress,
                                     onChanged: (val) =>
                                         setState(() => _userAddress = val),
                                   ),
@@ -155,31 +157,36 @@ void showToast(String msg, {int duration, int gravity}) {
                                       border: OutlineInputBorder(),
                                       labelText: 'Phone Number',
                                     ),
-                                    initialValue: (userPhoneNumber == '') ? '' : userPhoneNumber,
+                                    initialValue: (userPhoneNumber == '')
+                                        ? ''
+                                        : userPhoneNumber,
                                     inputFormatters: [
-                                     TextInputMask(mask: '9999 9999 9999', reverse: false)
+                                      TextInputMask(
+                                          mask: '9999 9999 9999',
+                                          reverse: false)
                                     ],
-                                    onChanged: (val) => setState(
-                                        () => _userPhoneNumber = val),
+                                    onChanged: (val) =>
+                                        setState(() => _userPhoneNumber = val),
                                   ),
                                   SizedBox(height: 30.0),
                                   ElevatedButton(
                                     onPressed: () async {
                                       if (_formkey.currentState.validate()) {
-                                        final CollectionReference collectionReference = FirebaseFirestore.instance.collection("user");
+                                        final CollectionReference
+                                            collectionReference =
+                                            FirebaseFirestore.instance
+                                                .collection("user");
                                         collectionReference.doc(user).update({
                                           'fullname': _userFullName,
                                           'address': _userAddress,
-                                          'phone_number': _userPhoneNumber, 
+                                          'phone_number': _userPhoneNumber,
                                           'photoUrl': _imagePath
                                         });
-                                        
                                       }
 
-                                       showToast('Profile Updated', duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-                                      
-                                     
-                                      
+                                      showToast('Profile Updated',
+                                          duration: Toast.LENGTH_LONG,
+                                          gravity: Toast.BOTTOM);
                                     },
                                     child: Text('Save Profile'),
                                   )

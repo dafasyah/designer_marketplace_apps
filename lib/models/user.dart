@@ -19,8 +19,14 @@ class Users {
   String phone;
   final double lat;
   final double lng;
-  int minimumPrice;
-  Users({this.name, this.address, this.profile, this.lat, this.lng, this.minimumPrice});
+  String minimumPrice;
+  Users(
+      {this.name,
+      this.address,
+      this.profile,
+      this.lat,
+      this.lng,
+      this.minimumPrice});
 }
 
 class Portofolio {

@@ -14,6 +14,9 @@ class UserController extends GetxController {
       FirebaseFirestore.instance.collection('user');
   final user = FirebaseAuth.instance.currentUser.uid;
   final ratingController = TextEditingController();
+  TextEditingController fullname = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController price = TextEditingController();
   RxList<Location> locations = <Location>[].obs;
   Rx<Users> currentUser = Users().obs;
   RxList<Portofolio> portofolio = <Portofolio>[].obs;
@@ -58,13 +61,22 @@ class UserController extends GetxController {
         .toList());
   }
 
-  updateUser({String address, double latitude, double longitude}) {
+  updateUser({String address, String fullname, String phone, String price}) {
     CollectionReference users = firestore.collection('user');
     users.doc(user).update({
       'address': address,
-      'latitude': latitude,
-      'longitude': longitude,
+      'fullname': fullname,
+      'phone_number': phone,
+      'minimum_price': price,
     });
+  }
+
+  updateImage({String image}) {
+    CollectionReference users = firestore.collection('user');
+    users.doc(user).update({
+      'photoUrl': image,
+    });
+    selectedImagePath = ''.obs;
   }
 
   addPortofolio(String image) {
@@ -124,10 +136,16 @@ class UserController extends GetxController {
     });
   }
 
+  currentUsers() {
+    getCurrentUser(user);
+    print('update');
+    update();
+  }
+
   getCurrentUser(String id) async {
     DocumentSnapshot snapshot = await _userCollection.doc(id).get();
     return currentUser.update((val) {
-      val.name = snapshot.data()['fullname'];
+      val.name = snapshot.data()['name'];
       val.address = snapshot.data()['address'];
       val.profile = snapshot.data()['photoUrl'];
       val.phone = snapshot.data()['phone_number'];
@@ -136,6 +154,7 @@ class UserController extends GetxController {
   }
 
   void getImage(ImageSource source) async {
+    selectedImagePath = ''.obs;
     // ignore: deprecated_member_use
     pickedFile = await ImagePicker.pickImage(
         source: source); //().getImage(source: source);

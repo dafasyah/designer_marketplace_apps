@@ -15,11 +15,13 @@ class MapsController extends GetxController {
       var address =
           await Geocoder.local.findAddressesFromCoordinates(coordinates);
       currentLocation = address.first.addressLine.obs;
-      addressController = TextEditingController(text: currentLocation.toString());
+      addressController =
+          TextEditingController(text: currentLocation.toString());
+      print(currentLocation + "LAT E");
     } catch (e) {
       print(e);
     } finally {
-      print(currentLocation + "LAT");
+      print(currentLocation + "LAT E");
     }
   }
 }
