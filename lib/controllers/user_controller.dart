@@ -166,6 +166,7 @@ class UserController extends GetxController {
   }
 
   Future<String> postImage() async {
+    isLoading.toggle();
     String fileName = pickedFile.path.split("/").last;
     firebase_storage.Reference reference = firebase_storage
         .FirebaseStorage.instance
@@ -173,6 +174,7 @@ class UserController extends GetxController {
         .child('portofolio/$fileName');
     final data = await reference.putFile(pickedFile);
     String photoPath = await data.ref.getDownloadURL();
+    isLoading.toggle();
     print(photoPath);
     return photoPath;
   }

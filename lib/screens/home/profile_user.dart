@@ -49,155 +49,169 @@ class _ProfileUserState extends State<ProfileUser> {
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          return StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('user')
-                  .doc(snapshot.data.uid)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                final userName = snapshot.data['fullname'];
-                final userAddress = snapshot.data['address'].toString();
-                final userPhoneNumber =
-                    snapshot.data['phone_number'].toString();
-                // final userRole = snapshot.data['role'].toString();
-                // final userUID = snapshot.data['user_id'].toString();
-                // final userEmail = snapshot.data['name'].toString();
-                final userPhoto = snapshot.data['photoUrl'].toString();
+          if (snapshot.hasData) {
+            return StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('user')
+                    .doc(snapshot.data.uid)
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    final userName = snapshot.data['fullname'];
+                    final userAddress = snapshot.data['address'].toString();
+                    final userPhoneNumber =
+                        snapshot.data['phone_number'].toString();
+                    // final userRole = snapshot.data['role'].toString();
+                    // final userUID = snapshot.data['user_id'].toString();
+                    // final userEmail = snapshot.data['name'].toString();
+                    final userPhoto = snapshot.data['photoUrl'].toString();
 
-                return Container(
-                  child: Scaffold(
-                    resizeToAvoidBottomInset: false,
-                    appBar: AppBar(title: Text("My Profile"), actions: <Widget>[
-                      FlatButton.icon(
-                          icon: Icon(Icons.person),
-                          label: Text('Log Out'),
-                          onPressed: () async {
-                            await _auth.signOut();
-                            Navigator.of(context).pop();
-                          }),
-                    ]),
-                    body: Form(
-                      key: _formkey,
-                      child: SingleChildScrollView(
-                        // physics: ClampingScrollPhysics(),
-                        reverse: true,
-                        child: Container(
-                          margin: EdgeInsets.all(20),
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  (userPhoto != '')
-                                      ? Container(
-                                          width: 200,
-                                          height: 200,
-                                          // padding: const EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                  color: Colors.black),
-                                              image: DecorationImage(
-                                                  image:
-                                                      NetworkImage(userPhoto),
-                                                  fit: BoxFit.cover)),
-                                        )
-                                      : Container(
-                                          width: 200,
-                                          height: 200,
-                                          // padding: const EdgeInsets.all(10),
-                                          child: Expanded(
-                                            child: Icon(
-                                              Icons.account_circle_rounded,
-                                              size: 200,
+                    return Container(
+                      child: Scaffold(
+                        resizeToAvoidBottomInset: false,
+                        appBar:
+                            AppBar(title: Text("My Profile"), actions: <Widget>[
+                          FlatButton.icon(
+                              icon: Icon(Icons.person),
+                              label: Text('Log Out'),
+                              onPressed: () async {
+                                await _auth.signOut();
+                                Navigator.of(context).pop();
+                              }),
+                        ]),
+                        body: Form(
+                          key: _formkey,
+                          child: SingleChildScrollView(
+                            // physics: ClampingScrollPhysics(),
+                            reverse: true,
+                            child: Container(
+                              margin: EdgeInsets.all(20),
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      (userPhoto != '')
+                                          ? Container(
+                                              width: 200,
+                                              height: 200,
+                                              // padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                      color: Colors.black),
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          userPhoto),
+                                                      fit: BoxFit.cover)),
+                                            )
+                                          : Container(
+                                              width: 200,
+                                              height: 200,
+                                              // padding: const EdgeInsets.all(10),
+                                              child: Expanded(
+                                                child: Icon(
+                                                  Icons.account_circle_rounded,
+                                                  size: 200,
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                      RaisedButton(
+                                          child: Text('Change Profile Picture'),
+                                          onPressed: () async {
+                                            File file = await getImage();
+
+                                            _imagePath = await DatabaseService
+                                                .uploadImage(file);
+
+                                            setState(() {});
+                                          }),
+                                      SizedBox(height: 10.0),
+                                      TextFormField(
+                                        key: Key(userName),
+                                        // controller: controller,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Full Name',
                                         ),
-                                  RaisedButton(
-                                      child: Text('Change Profile Picture'),
-                                      onPressed: () async {
-                                        File file = await getImage();
+                                        initialValue:
+                                            (userName == '') ? '' : userName,
+                                        onChanged: (val) =>
+                                            setState(() => _userFullName = val),
+                                      ),
+                                      SizedBox(height: 10.0),
+                                      TextFormField(
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Address',
+                                        ),
+                                        initialValue: (userAddress == '')
+                                            ? ''
+                                            : userAddress,
+                                        onChanged: (val) =>
+                                            setState(() => _userAddress = val),
+                                      ),
+                                      SizedBox(height: 10.0),
+                                      TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Phone Number',
+                                        ),
+                                        initialValue: (userPhoneNumber == '')
+                                            ? ''
+                                            : userPhoneNumber,
+                                        inputFormatters: [
+                                          TextInputMask(
+                                              mask: '9999 9999 9999',
+                                              reverse: false)
+                                        ],
+                                        onChanged: (val) => setState(
+                                            () => _userPhoneNumber = val),
+                                      ),
+                                      SizedBox(height: 30.0),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          if (_formkey.currentState
+                                              .validate()) {
+                                            final CollectionReference
+                                                collectionReference =
+                                                FirebaseFirestore.instance
+                                                    .collection("user");
+                                            collectionReference
+                                                .doc(user)
+                                                .update({
+                                              'fullname': _userFullName,
+                                              'address': _userAddress,
+                                              'phone_number': _userPhoneNumber,
+                                              'photoUrl': _imagePath
+                                            });
+                                          }
 
-                                        _imagePath =
-                                            await DatabaseService.uploadImage(
-                                                file);
-
-                                        setState(() {});
-                                      }),
-                                  SizedBox(height: 10.0),
-                                  TextFormField(
-                                    key: Key(userName),
-                                    // controller: controller,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Full Name',
-                                    ),
-                                    initialValue:
-                                        (userName == '') ? '' : userName,
-                                    onChanged: (val) =>
-                                        setState(() => _userFullName = val),
-                                  ),
-                                  SizedBox(height: 10.0),
-                                  TextFormField(
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Address',
-                                    ),
-                                    initialValue:
-                                        (userAddress == '') ? '' : userAddress,
-                                    onChanged: (val) =>
-                                        setState(() => _userAddress = val),
-                                  ),
-                                  SizedBox(height: 10.0),
-                                  TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Phone Number',
-                                    ),
-                                    initialValue: (userPhoneNumber == '')
-                                        ? ''
-                                        : userPhoneNumber,
-                                    inputFormatters: [
-                                      TextInputMask(
-                                          mask: '9999 9999 9999',
-                                          reverse: false)
-                                    ],
-                                    onChanged: (val) =>
-                                        setState(() => _userPhoneNumber = val),
-                                  ),
-                                  SizedBox(height: 30.0),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      if (_formkey.currentState.validate()) {
-                                        final CollectionReference
-                                            collectionReference =
-                                            FirebaseFirestore.instance
-                                                .collection("user");
-                                        collectionReference.doc(user).update({
-                                          'fullname': _userFullName,
-                                          'address': _userAddress,
-                                          'phone_number': _userPhoneNumber,
-                                          'photoUrl': _imagePath
-                                        });
-                                      }
-
-                                      showToast('Profile Updated',
-                                          duration: Toast.LENGTH_LONG,
-                                          gravity: Toast.BOTTOM);
-                                    },
-                                    child: Text('Save Profile'),
-                                  )
-                                ]),
+                                          showToast('Profile Updated',
+                                              duration: Toast.LENGTH_LONG,
+                                              gravity: Toast.BOTTOM);
+                                        },
+                                        child: Text('Save Profile'),
+                                      )
+                                    ]),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                );
-              });
+                    );
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                });
+          } else {
+            return CircularProgressIndicator();
+          }
         });
   }
 }

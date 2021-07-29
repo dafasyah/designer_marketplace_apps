@@ -36,8 +36,8 @@ class DesignerPortofolio extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           SizedBox(),
-                          (userController.isLoading.value)
-                              ? Loading.init()
+                          (userController.isLoading.value == true)
+                              ? CircularProgressIndicator()
                               : buttonChat(
                                   icon: Icons.send,
                                   onTap: () async {

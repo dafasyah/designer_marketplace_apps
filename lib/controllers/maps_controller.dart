@@ -6,7 +6,7 @@ class MapsController extends GetxController {
   var currentLocation = ''.obs;
   var latitude = 0.0.obs;
   var longitude = 0.0.obs;
-  TextEditingController addressController;
+  var addressController = TextEditingController();
   getAddress(double lat, double lng) async {
     try {
       final coordinates = Coordinates(lat, lng); //-7.1937564, 108.2025172);
