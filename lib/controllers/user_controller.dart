@@ -145,11 +145,12 @@ class UserController extends GetxController {
   getCurrentUser(String id) async {
     DocumentSnapshot snapshot = await _userCollection.doc(id).get();
     return currentUser.update((val) {
-      val.name = snapshot.data()['name'];
+      val.name = snapshot.data()['fullname'];
       val.address = snapshot.data()['address'];
       val.profile = snapshot.data()['photoUrl'];
       val.phone = snapshot.data()['phone_number'];
       val.minimumPrice = snapshot.data()['minimum_price'];
+      val.email = snapshot.data()['name'];
     });
   }
 

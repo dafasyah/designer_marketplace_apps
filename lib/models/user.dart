@@ -17,6 +17,7 @@ class Users {
   String address;
   String profile;
   String phone;
+  String email;
   final double lat;
   final double lng;
   String minimumPrice;
@@ -24,6 +25,7 @@ class Users {
       {this.name,
       this.address,
       this.profile,
+      this.email,
       this.lat,
       this.lng,
       this.minimumPrice});

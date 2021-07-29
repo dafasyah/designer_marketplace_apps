@@ -44,17 +44,22 @@ class DesignerProfileUpdate extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text(userController.currentUser.value.name??'',
+                      child: Text(
+                          userController.currentUser.value.name == null ||
+                                  userController.currentUser.value.name == ''
+                              ? userController.currentUser.value.email
+                              : userController.currentUser.value.name,
                           textAlign: TextAlign.center),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text(userController.currentUser.value.address??'',
+                      child: Text(
+                          userController.currentUser.value.address ?? '',
                           textAlign: TextAlign.center),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text(userController.currentUser.value.phone??'',
+                      child: Text(userController.currentUser.value.phone ?? '',
                           textAlign: TextAlign.center),
                     ),
                     Padding(
