@@ -48,12 +48,14 @@ class _UserListState extends State<UserList> {
               child: Text("Loading..."),
             );
           } else {
-            return Container(
+            return 
+            snapshot.data.isEmpty ? Center(child: Text('Sorry, there is no request job yet'),) : 
+            Container(
               padding: const EdgeInsets.all(10),
               child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (_, index) {
-                    return ListTile(
+                     return ListTile(
                       title: FutureBuilder<dynamic>(
                         future: getUserByUserId(snapshot.data[index]['user_id']),
                         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {

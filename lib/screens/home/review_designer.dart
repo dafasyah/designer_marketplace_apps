@@ -19,11 +19,11 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
     userController.getCurrentUser(widget.userId);
     return Container(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           title: Text('Review Designer'),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             // mainAxisAlignment: MainAxisAlignment.center,
@@ -45,6 +45,11 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
                         backgroundImage: NetworkImage(
                             userController.currentUser.value.profile),
                       ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(15),
+                child: 
+                Text(userController.currentUser.value.name),
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),

@@ -41,6 +41,16 @@ class ProfileDesigner extends StatelessWidget {
                       child: Text(userController.currentUser.value.address,
                           textAlign: TextAlign.center),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(userController.currentUser.value.phone,
+                          textAlign: TextAlign.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Text(userController.currentUser.value.minimumPrice,
+                          textAlign: TextAlign.center),
+                    ),
                     SizedBox(height: 24),
                     Padding(
                       padding: const EdgeInsets.only(left: 12),
@@ -52,7 +62,7 @@ class ProfileDesigner extends StatelessWidget {
                     (userController.portofolio.isEmpty)
                         ? Padding(
                             padding: const EdgeInsets.only(top: 80),
-                            child: Text('Tidak ada portofolio',
+                            child: Text('There is no portofolio yet',
                                 textAlign: TextAlign.center),
                           )
                         : Container(

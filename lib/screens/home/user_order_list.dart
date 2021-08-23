@@ -51,7 +51,7 @@ class _ListPageState extends State<ListPage> {
               child: Text("Loading..."),
             );
           }
-          return ListView(
+          return snapshot.data.docs.length == 0 ? Center(child:  Text('You have no order list yet'),) : ListView(
             children: snapshot.data.docs.map((document) {
               return ListTile(
                 title: Text(document['designer_name']),

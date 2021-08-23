@@ -34,6 +34,7 @@ class _RegisterDesignerState extends State<RegisterDesigner> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -50,11 +51,16 @@ class _RegisterDesignerState extends State<RegisterDesigner> {
         // ],
       ),
       body: Container(
+        
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+      
         child: Form(
+          
           key: _formKey,
           child: Column(
+            
             children: <Widget>[
+              
               SizedBox(height: 20.0),
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Email'),

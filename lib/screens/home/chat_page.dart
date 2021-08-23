@@ -90,7 +90,7 @@ class ChatPage extends StatelessWidget {
                       decoration: InputDecoration(
                         filled: true,
                         border: InputBorder.none,
-                        hintText: "Tulis Pesan Disini",
+                        hintText: "Type here...",
                       ),
                     ),
                   ),

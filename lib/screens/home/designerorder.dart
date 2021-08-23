@@ -85,7 +85,7 @@ class _ListPageState extends State<ListPage> {
                 child: Text("Loading..."),
               );
             } else {
-              return SafeArea(
+              return snapshot.data.isEmpty ? Center(child: Text('Sorry, there is no job list yet'),) : SafeArea(
                 child: Column(
                   // mainAxisSize: MainAxisSize.max,
                   // crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -28,16 +28,15 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
 
   // File newProfilePic;
   String _imagePath = '';
-  // String _designerFullName = '';
+  String _designerFullName = '';
   // String _designerAddress = '';
-  // String _designerPhoneNumber = '';
-  // String _designerMinimumPrice = '';
+  String _designerPhoneNumber = '';
+  String _designerMinimumPrice = '';
 
-  TextEditingController _designerFullName = TextEditingController();
-  // TextEditingController _imagePath = TextEditingController();
-  TextEditingController _designerAddress = TextEditingController();
-  TextEditingController _designerPhoneNumber = TextEditingController();
-  TextEditingController _designerMinimumPrice = TextEditingController();
+  // TextEditingController _designerFullName;
+  TextEditingController _designerAddress;
+  // TextEditingController _designerPhoneNumber;
+  // TextEditingController _designerMinimumPrice;
 
   Future<File> getImage() async {
     return await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -45,6 +44,14 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
 
   void showToast(String msg, {int duration, int gravity}) {
     Toast.show(msg, context, duration: duration, gravity: gravity);
+  }
+
+  void initState(){
+    // _designerFullName = TextEditingController();
+    _designerAddress = TextEditingController();
+    // _designerPhoneNumber = TextEditingController();
+    // _designerMinimumPrice = TextEditingController();
+    super.initState();
   }
 
   @override
@@ -64,19 +71,19 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                     .snapshots(),
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasData) {
-                    var designerName = snapshot.data['fullname'].toString();
-                    var designerAddress = snapshot.data['address'].toString();
-                    var designerPhoneNumber =
+                    final designerName = snapshot.data['fullname'].toString();
+                    final designerAddress = snapshot.data['address'].toString();
+                    final designerPhoneNumber =
                         snapshot.data['phone_number'].toString();
-                    var designerPhoto = snapshot.data['photoUrl'].toString();
-                    var designerMinimumPrice =
+                    final designerPhoto = snapshot.data['photoUrl'].toString();
+                    final designerMinimumPrice =
                         snapshot.data['minimum_price'].toString();
 
-                    _designerFullName.text = designerName;
+                    // _designerFullName.text= designerName;
                     _designerAddress.text = designerAddress;
-                    _designerPhoneNumber.text = designerPhoneNumber;
-                    _imagePath = designerPhoto;
-                    _designerMinimumPrice.text = designerMinimumPrice;
+                    // _designerPhoneNumber.text = designerPhoneNumber;
+                    // _imagePath = designerPhoto;
+                    // _designerMinimumPrice.text = designerMinimumPrice;
                     // final userUID = snapshot.data['user_id'].toString();
                     // final userEmail = snapshot.data['name'].toString();
                     return Container(
@@ -145,16 +152,17 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                             setState(() {});
                                           }),
                                       SizedBox(height: 10.0),
-                                      TextField(
-                                        key: Key(designerName),
-                                        controller: _designerFullName,
+                                      TextFormField(
+                                        // key: Key(designerName),
+                                        // controller: _designerFullName,
+                                        // keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(),
                                           labelText: 'Full Name',
                                         ),
-                                        // initialValue:  (designerName == '' ) ? '' : designerName,
-                                        // onChanged: (val) =>
-                                        //     setState(() => _designerFullName = val),
+                                        initialValue:  (designerName == '' ) ? '' : designerName,
+                                        onChanged: (val) =>
+                                            setState(() => _designerFullName = val),
                                       ),
                                       SizedBox(height: 10.0),
                                       TextField(
@@ -172,38 +180,40 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                         //     setState(() => _designerAddress = val),
                                       ),
                                       SizedBox(height: 10.0),
-                                      TextField(
-                                        controller: _designerPhoneNumber,
+                                      TextFormField(
+                                        // key: Key(designerPhoneNumber),
+                                        // controller: _designerPhoneNumber,
                                         keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(),
                                           labelText: 'Phone Number',
                                         ),
-                                        // initialValue: (designerPhoneNumber == '') ? '' : designerPhoneNumber,
+                                        initialValue: (designerPhoneNumber == '') ? '' : designerPhoneNumber,
                                         inputFormatters: [
                                           TextInputMask(
                                               mask: '9999 9999 9999',
                                               reverse: false)
                                         ],
-                                        // onChanged: (val) => setState(
-                                        //     () => _designerPhoneNumber = val),
+                                        onChanged: (val) => setState(
+                                            () => _designerPhoneNumber = val),
                                       ),
                                       SizedBox(height: 10.0),
-                                      TextField(
-                                        controller: _designerMinimumPrice,
+                                      TextFormField(
+                                        // key: Key(designerMinimumPrice),
+                                        // controller: _designerMinimumPrice,
                                         keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(),
                                           labelText: 'Minimum Price',
                                         ),
-                                        // initialValue: (designerMinimumPrice == '') ? '' : designerMinimumPrice,
+                                        initialValue: (designerMinimumPrice == '') ? '' : designerMinimumPrice,
                                         inputFormatters: [
                                           TextInputMask(
                                               mask: '\R!p!.! !9+.999',
                                               reverse: true)
                                         ],
-                                        // onChanged: (val) => setState(
-                                        //     () => _designerMinimumPrice = val),
+                                        onChanged: (val) => setState(
+                                            () => _designerMinimumPrice = val),
                                       ),
                                       SizedBox(height: 30.0),
                                       ElevatedButton(
@@ -227,16 +237,16 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                                 collectionReference =
                                                 FirebaseFirestore.instance
                                                     .collection("user");
-                                            collectionReference.doc(user).set({
+                                            collectionReference.doc(user).update({
                                               'fullname':
-                                                  _designerFullName.text,
+                                                  _designerFullName,
                                               'address': mapsController
                                                   .addressController.text,
                                               'phone_number':
-                                                  _designerPhoneNumber.text,
+                                                  _designerPhoneNumber,
                                               'photoUrl': _imagePath,
                                               'minimum_price':
-                                                  _designerMinimumPrice.text,
+                                                  _designerMinimumPrice,
                                               // 'latitude': mapsController.latitude,
                                               // 'longitude': mapsController.longitude,
                                             });

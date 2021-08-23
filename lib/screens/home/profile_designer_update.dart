@@ -18,15 +18,17 @@ class DesignerProfileUpdate extends StatelessWidget {
     userController.getCurrentUser(user);
     return Container(
       child: Scaffold(
-        appBar: AppBar(title: Text('Designer Profile'), actions: <Widget>[
-          FlatButton.icon(
-              icon: Icon(Icons.person),
-              label: Text('Log Out'),
-              onPressed: () async {
-                await _auth.signOut();
-                Navigator.of(context).pop();
-              }),
-        ]),
+        appBar: AppBar(title: Text('Designer Profile'), 
+        // actions: <Widget>[
+        //   FlatButton.icon(
+        //       icon: Icon(Icons.person),
+        //       label: Text('Log Out'),
+        //       onPressed: () async {
+        //         await _auth.signOut();
+        //         Navigator.of(context).pop();
+        //       }),
+        // ]
+        ),
         body: Obx(
           () => (userController.currentUser.value.name == null)
               ? Center(child: CircularProgressIndicator())
@@ -89,7 +91,7 @@ class DesignerProfileUpdate extends StatelessWidget {
                     (userController.portofolio.isEmpty)
                         ? Padding(
                             padding: const EdgeInsets.only(top: 80),
-                            child: Text('Tidak ada portofolio',
+                            child: Text('There is no portofolio yet, upload now!',
                                 textAlign: TextAlign.center),
                           )
                         : Container(
