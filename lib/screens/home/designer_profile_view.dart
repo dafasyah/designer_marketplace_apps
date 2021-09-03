@@ -1,19 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controllers/user_controller.dart';
+import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/screens/home/profile_designer_update.dart';
 import 'package:get/get.dart';
 
 class ProfileDesigner extends StatelessWidget {
   final String userId;
   ProfileDesigner({this.userId});
+
   @override
   Widget build(BuildContext context) {
     final userController = Get.find<UserController>();
+
     userController.buildStramPorto(id: userId, isUser: true);
     userController.getCurrentUser(userId);
-    return Container(
+    userController.buildStreamRate(id: userId);
+
+    return WillPopScope(
+      onWillPop: () {
+        userController.total.value = 0.0;
+        userController.resultRate.value = 0.0;
+        Get.back();
+        return;
+      },
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                userController.total.value = 0.0;
+                userController.resultRate.value = 0.0;
+                Get.back();
+              }),
           title: Text('Designer Profile'),
         ),
         body: Obx(
@@ -30,6 +48,19 @@ class ProfileDesigner extends StatelessWidget {
                               backgroundImage: NetworkImage(
                                   userController.currentUser.value.profile),
                             ),
+                    ),
+                    (userController.ratings.isEmpty)
+                        ? Text('No Rate')
+                        : Column(
+                            children: userController.ratings
+                                .map((element) => Text(element.rating))
+                                .toList(),
+                          ),
+                    TextButton(
+                      onPressed: () {
+                        Get.to(() => RatingPage());
+                      },
+                      child: Text('${userController.resultRate.value}'),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
@@ -96,9 +127,64 @@ class ProfileDesigner extends StatelessWidget {
                   ],
                 ),
         ),
-        // SingleChildScrollView(
-        //   child:
-        // ),
+      ),
+    );
+  }
+}
+
+class RatingPage extends GetView<UserController> {
+  @override
+  Widget build(BuildContext context) {
+    controller.calculationRate();
+    return WillPopScope(
+      onWillPop: () {
+        controller.total.value = 0.0;
+        controller.resultRate.value = 0.0;
+        Get.back();
+        return;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                controller.total.value = 0.0;
+                controller.resultRate.value = 0.0;
+                Get.back();
+              }),
+          title: Text('Review & Rating'),
+        ),
+        body: ListView(
+          children: [
+            (controller.ratings.isEmpty)
+                ? Text('No Rate')
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: controller.ratings
+                          .map((element) => Container(
+                                margin: EdgeInsets.all(8),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      element.rating,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text(element.text),
+                                    SizedBox(height: 8),
+                                    Text('Reviewed by ${element.email}')
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }

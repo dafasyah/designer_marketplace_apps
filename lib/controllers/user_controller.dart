@@ -20,7 +20,11 @@ class UserController extends GetxController {
   RxList<Location> locations = <Location>[].obs;
   Rx<Users> currentUser = Users().obs;
   RxList<Portofolio> portofolio = <Portofolio>[].obs;
+  RxList<Rating> ratings = <Rating>[].obs;
   var selectedImagePath = ''.obs;
+  var total = 0.0.obs;
+  var resultRate = 0.0.obs;
+
   File pickedFile;
   RxBool isLoading = false.obs;
   String image =
@@ -29,6 +33,12 @@ class UserController extends GetxController {
   buildStream() => locations.bindStream(listDesigner());
   buildStramPorto({String id, bool isUser = false}) =>
       portofolio.bindStream(listPortofolio(id: id, isUser: isUser));
+  buildStreamRate({String id}) => ratings.bindStream(listRating(id: id));
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
 
   Stream<List<Location>> listDesigner() {
     Stream<QuerySnapshot> stream = firestore.collection('location').snapshots();
@@ -40,6 +50,22 @@ class UserController extends GetxController {
               lng: e.data()['lng'],
             ))
         .toList());
+  }
+
+  calculationRate() {
+    ratings.forEach((element) {
+      double rate = double.tryParse(element.rating);
+      total += rate;
+      //int result = total / ratings.length;
+    });
+    //print("rate $rate");
+    print("total $total");
+    print("lenght ${ratings.length}");
+
+    double result = total / ratings.length;
+    resultRate = result.obs;
+    print('resutlt $result');
+    //print("RATE TORAL $result");
   }
 
   Stream<List<Portofolio>> listPortofolio({String id, bool isUser = false}) {
@@ -58,6 +84,20 @@ class UserController extends GetxController {
             id: e.id,
           ),
         )
+        .toList());
+  }
+
+  Stream<List<Rating>> listRating({String id}) {
+    ratings.clear();
+    Stream<QuerySnapshot> stream =
+        firestore.collection('user').doc(id).collection('rating').snapshots();
+    return stream.map((event) => event.docs
+        .map((e) => Rating(
+              email: e.data()['email'],
+              from: e.data()['from'],
+              rating: e.data()['rating'],
+              text: e.data()['text'],
+            ))
         .toList());
   }
 
@@ -102,13 +142,14 @@ class UserController extends GetxController {
     Get.back();
   }
 
-  addRating(String id, double rating, String requestId) {
+  addRating(String email, String id, double rating, String requestId) {
     CollectionReference portofolio =
         firestore.collection('user').doc(id).collection('rating');
     CollectionReference request = firestore.collection('request_designer');
     try {
       isLoading.toggle();
       portofolio.add({
+        'email': email,
         'from': user,
         'rating': '$rating',
         'text': ratingController.text,

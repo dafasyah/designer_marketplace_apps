@@ -12,10 +12,10 @@ import 'package:flutter_application_1/screens/wrapper_designer.dart';
 import 'package:flutter_application_1/services/auth.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:flutter_application_1/shared/loading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:dcdg/dcdg.dart';
+//import 'package:dcdg/dcdg.dart';
 
 // import 'package:rxdart/rxdart.dart';
 
@@ -43,43 +43,43 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Designer Apps',
       home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (ctx, userSnapshot) {
-          if (userSnapshot.hasData) {
-            return StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('user')
-                  .doc(userSnapshot.data.uid)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<DocumentSnapshot> snapshotUser) {
-                // return StreamBuilder<DocumentSnapshot>(
-                //   stream: FirebaseFirestore.instance.collection("designer").doc(userSnapshot.data.uid).snapshots(),
-                //   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotDesigner)
-                // {
-                if (snapshotUser.hasData && snapshotUser.data != null) {
-                  final user = snapshotUser.data.data();
-                  // final designer = snapshotDesigner.data.data();
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (ctx, userSnapshot) {
+            if (userSnapshot.hasData) {
+              return StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('user')
+                    .doc(userSnapshot.data.uid)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshotUser) {
+                  // return StreamBuilder<DocumentSnapshot>(
+                  //   stream: FirebaseFirestore.instance.collection("designer").doc(userSnapshot.data.uid).snapshots(),
+                  //   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotDesigner)
+                  // {
+                  if (snapshotUser.hasData && snapshotUser.data != null) {
+                    final user = snapshotUser.data.data();
+                    // final designer = snapshotDesigner.data.data();
 
-                  if (user['role'] == 'designer') {
-                    return HomeDesigner();
+                    if (user['role'] == 'designer') {
+                      return HomeDesigner();
+                    } else {
+                      return Home();
+                    }
                   } else {
-                    return Home();
+                    return Material(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   }
-                } else {
-                  return Material(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-                // }
-                // );
-              },
-            );
-          }
-          return Authenticate();
-        }),
+                  // }
+                  // );
+                },
+              );
+            }
+            return Authenticate();
+          }),
       builder: Loading.init(),
     );
     // final user = Provider.of<User>(context);
@@ -131,5 +131,46 @@ class MyApp extends StatelessWidget {
     //       ),
     //     );
     //
+  }
+}
+
+class NotificationApp extends StatefulWidget {
+  @override
+  _NotificationAppState createState() => _NotificationAppState();
+}
+
+class _NotificationAppState extends State<NotificationApp> {
+  FlutterLocalNotificationsPlugin localNotification;
+  @override
+  void initState() {
+    super.initState();
+    var androidInitialize = AndroidInitializationSettings('ic_launcher');
+    var iOSInitialize = IOSInitializationSettings();
+    var initialzationSettings =
+        InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+    localNotification = FlutterLocalNotificationsPlugin();
+    localNotification.initialize(initialzationSettings);
+  }
+
+  Future _showNotification() async {
+    var androidDetails = AndroidNotificationDetails("channelId",
+        "Local Notification", "This is the description of the Notification",
+        importance: Importance.high);
+
+    var iosDetails = IOSNotificationDetails();
+    var generalNotificationDetails =
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
+    await localNotification.show(
+        0, "Notifi Title", "The body", generalNotificationDetails);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showNotification,
+        child: Icon(Icons.notifications_active),
+      ),
+    );
   }
 }

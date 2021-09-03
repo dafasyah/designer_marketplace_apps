@@ -46,3 +46,11 @@ class Location {
   String name;
   Location({this.address, this.designerId, this.lat, this.lng, this.name});
 }
+
+class Rating {
+  String email;
+  String from;
+  String rating;
+  String text;
+  Rating({this.email,this.from, this.rating, this.text});
+}

@@ -48,8 +48,7 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
               ),
               Container(
                 padding: const EdgeInsets.all(15),
-                child: 
-                Text(userController.currentUser.value.name),
+                child: Text(userController.currentUser.value.name),
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
@@ -89,7 +88,11 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
                   : Container(
                       child: ElevatedButton(
                           onPressed: () {
-                            userController.addRating(widget.userId, rating, widget.requestId);
+                            userController.addRating(
+                                userController.currentUser.value.email,
+                                widget.userId,
+                                rating,
+                                widget.requestId);
                           },
                           child: Text('Finish')),
                     ))
