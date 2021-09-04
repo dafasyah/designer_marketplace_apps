@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/services/auth.dart';
 import 'package:flutter_application_1/services/database.dart';
@@ -22,6 +24,7 @@ class _ProfileUserState extends State<ProfileUser> {
   final user = FirebaseAuth.instance.currentUser.uid;
 
   TextEditingController controller;
+  TextEditingController emailCT = TextEditingController();
 
   // File newProfilePic;
   String _imagePath = '';
@@ -63,7 +66,7 @@ class _ProfileUserState extends State<ProfileUser> {
                         snapshot.data['phone_number'].toString();
                     // final userRole = snapshot.data['role'].toString();
                     // final userUID = snapshot.data['user_id'].toString();
-                    // final userEmail = snapshot.data['name'].toString();
+                    final userEmail = snapshot.data['name'].toString();
                     final userPhoto = snapshot.data['photoUrl'].toString();
 
                     return Container(
@@ -130,6 +133,63 @@ class _ProfileUserState extends State<ProfileUser> {
 
                                             setState(() {});
                                           }),
+                                      SizedBox(height: 10.0),
+                                      TextField(
+                                        // onTap: () async {
+                                        // },
+                                        controller: emailCT,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Change Email',
+                                          hintText: userEmail,
+                                        ),
+                                      ),
+                                      TextButton(
+                                          onPressed: () async {
+                                            // await auth.FirebaseAuth.instance
+                                            //     .currentUser
+                                            //     .sendEmailVerification();
+                                            try {
+                                              auth.User user =
+                                                  await _auth.getCurrentUser();
+                                              await user
+                                                  .updateEmail(emailCT.text);
+                                            } catch (e) {
+                                              Toast.show(e.message, context,
+                                                  duration: Toast.LENGTH_LONG,
+                                                  gravity: Toast.BOTTOM);
+                                            }
+                                          },
+                                          child: Text('Update Email')),
+                                      SizedBox(height: 10.0),
+                                      SizedBox(height: 10.0),
+                                      TextField(
+                                        readOnly: true,
+                                        onTap: () async {
+                                          // Get.to(() => FindNearby());
+                                          try {
+                                            await FirebaseAuth.instance
+                                                .sendPasswordResetEmail(
+                                                    email: userEmail);
+
+                                            Toast.show(
+                                                'Please check your email',
+                                                context,
+                                                duration: Toast.LENGTH_LONG,
+                                                gravity: Toast.BOTTOM);
+                                          } catch (e) {
+                                            print(e.message);
+                                            Toast.show(e.message, context,
+                                                duration: Toast.LENGTH_LONG,
+                                                gravity: Toast.BOTTOM);
+                                          }
+                                        },
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Change Password',
+                                          hintText: '********',
+                                        ),
+                                      ),
                                       SizedBox(height: 10.0),
                                       TextFormField(
                                         key: Key(userName),
