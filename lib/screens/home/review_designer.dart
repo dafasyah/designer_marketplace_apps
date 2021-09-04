@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/notif_controller.dart';
 import 'package:flutter_application_1/controllers/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -16,6 +17,7 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
   @override
   Widget build(BuildContext context) {
     final userController = Get.put(UserController());
+    final controller = Get.find<NotifController>();
     userController.getCurrentUser(widget.userId);
     return Container(
       child: Scaffold(
@@ -93,6 +95,8 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
                                 widget.userId,
                                 rating,
                                 widget.requestId);
+                            controller.showNotification('Reviewed',
+                                'Anda telah memberikan rating $rating');
                           },
                           child: Text('Finish')),
                     ))

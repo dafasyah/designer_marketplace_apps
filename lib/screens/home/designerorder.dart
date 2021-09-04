@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/notif_controller.dart';
 import 'package:flutter_application_1/screens/home/user_profile.dart';
 import 'package:get/get.dart';
 import 'chat_page.dart';
@@ -14,9 +15,6 @@ class DesignerOrder extends StatefulWidget {
 }
 
 class _DesignerOrder extends State<DesignerOrder> {
-  
- 
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -64,6 +62,8 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<NotifController>();
+
     return Container(
       padding: const EdgeInsets.all(10),
       child: FutureBuilder(
@@ -85,186 +85,189 @@ class _ListPageState extends State<ListPage> {
                 child: Text("Loading..."),
               );
             } else {
-              return snapshot.data.isEmpty ? Center(child: Text('Sorry, there is no job list yet'),) : SafeArea(
-                child: Column(
-                  // mainAxisSize: MainAxisSize.max,
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                          itemCount: snapshot.data.length,
-                          itemBuilder: (_, index) {
-                            var requestId = snapshot.data[index].id;
-                            var fromId = snapshot.data[index]['designer_id'];
-                            var toId = snapshot.data[index]['user_id'];
-                            return ListTile(
-                              // isThreeLine: true,
-                              title:
-                                  // FutureBuilder<dynamic>(
-                                  //   future: getUserByUserId(
-                                  //       snapshot.data[index]['user_id']),
-                                  //   builder: (BuildContext context,
-                                  //       AsyncSnapshot<dynamic> snapshot) {
-                                  //     if (snapshot.hasData) {
-                                  //       if (snapshot.data.length > 1) {
-                                  //         return Text(
-                                  //             'Two or more users with the same Id exists');
-                                  //       } else {
+              return snapshot.data.isEmpty
+                  ? Center(
+                      child: Text('Sorry, there is no job list yet'),
+                    )
+                  : SafeArea(
+                      child: Column(
+                        // mainAxisSize: MainAxisSize.max,
+                        // crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (_, index) {
+                                  var requestId = snapshot.data[index].id;
+                                  var fromId =
+                                      snapshot.data[index]['designer_id'];
+                                  var toId = snapshot.data[index]['user_id'];
+                                  return ListTile(
+                                    // isThreeLine: true,
+                                    title:
+                                        // FutureBuilder<dynamic>(
+                                        //   future: getUserByUserId(
+                                        //       snapshot.data[index]['user_id']),
+                                        //   builder: (BuildContext context,
+                                        //       AsyncSnapshot<dynamic> snapshot) {
+                                        //     if (snapshot.hasData) {
+                                        //       if (snapshot.data.length > 1) {
+                                        //         return Text(
+                                        //             'Two or more users with the same Id exists');
+                                        //       } else {
 
-                                  //         return Text(snapshot.data[0]['name']);
-                                  //       }
-                                  //     } else {
-                                  //       return Text('User not found');
-                                  //     }
-                                  //   },
-                                  // ),
-                                  Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextButton(
-                                    onPressed: () => Get.to(
-                                        () => ProfileUserDisplay(userId: toId)),
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) =>
-                                    //             ProfileUserDisplay())),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Text(snapshot.data[index]['user_name'])
+                                        //         return Text(snapshot.data[0]['name']);
+                                        //       }
+                                        //     } else {
+                                        //       return Text('User not found');
+                                        //     }
+                                        //   },
+                                        // ),
+                                        Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () => Get.to(() =>
+                                              ProfileUserDisplay(userId: toId)),
+                                          // Navigator.push(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //         builder: (context) =>
+                                          //             ProfileUserDisplay())),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(snapshot.data[index]
+                                                  ['user_name'])
+                                            ],
+                                          ),
+                                          // snapshot.data[index]['user_name']
+                                        ),
+                                        Text(
+                                          'Status : ' +
+                                              snapshot.data[index]['status'],
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 12),
+                                        ),
                                       ],
                                     ),
-                                    // snapshot.data[index]['user_name']
-                                  ),
-                                  Text(
-                                    'Status : ' +
-                                        snapshot.data[index]['status'],
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 12),
-                                  ),
-                                ],
-                              ),
 
-                              subtitle: Container(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Row(
-                                  // crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    // Expanded(
+                                    subtitle: Container(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Row(
+                                        // crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          // Expanded(
 
-                                    //   child:
+                                          //   child:
 
-                                    //    Text('Status : ' + document['status']),
+                                          //    Text('Status : ' + document['status']),
 
-                                    // ),
-                                    // Expanded(
-                                    //   child: Row(
-                                    //     mainAxisAlignment:
-                                    //         MainAxisAlignment.spaceBetween,
-                                    //     children: [
-                                    //       // Text(snapshot.data[index]['user_name']),
-                                    //       Text(
-                                    //         'Status : ' +
-                                    //             snapshot.data[index]['status'],
-                                    //         style: TextStyle(
-                                    //             color: Colors.grey, fontSize: 12),
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    // SizedBox(height: 30,),
-                                    snapshot.data[index]['status'] == 'Waiting'
-                                        ? Expanded(
-                                            child: SizedBox(),
-                                          )
-                                        : Expanded(
-                                            child: Row(children: [
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      Get.to(
-                                                        () => ChatPage(
-                                                          requestId: requestId,
-                                                          fromId: fromId,
-                                                          toId: toId,
-                                                        ),
-                                                      );
-                                                    },
-                                                    child: Text('Chat')),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Expanded(
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        showDialog(
-                                                            context: context,
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                AlertDialog(
-                                                                  title: Text(
-                                                                      "Finish?"),
-                                                                  content: Text(
-                                                                      "Are you sure your job has finished yet?"),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      child: Text(
-                                                                          "No",
-                                                                          style:
-                                                                              TextStyle(color: Colors.red)),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                    ),
-                                                                    TextButton(
-                                                                        child: Text(
-                                                                            "Yes"),
-                                                                        onPressed:
-                                                                            () {
-                                                                          FirebaseFirestore.instance.collection('request_designer').doc(snapshot.data[index].documentID).update({
-                                                                            'status':
-                                                                                'Finish'
-                                                                          });
-                                                                          setState(
-                                                                              () {
-                                                                            Navigator.popUntil(context,
-                                                                                ModalRoute.withName("/"));
-                                                                          });
-                                                                        })
-                                                                  ],
-                                                                ));
-                                                      });
-                                                    },
-                                                    child: Text('Finish')),
-                                              ),
-                                            ]),
-                                          )
-                                  ],
-                                ),
-                              ),
-                              // trailing: document['status'] == 'On Progress'
-                              //     ? ElevatedButton(
-                              //         onPressed: () {},
-                              //         child: Text('Chat'),
-                              //       )
-                              //     : document['status'] == 'Finish'
-                              //         ? ElevatedButton(
-                              //             onPressed: () {},
-                              //             child: Text('Review'),
-                              //           )
-                              //         : null,
-                            );
-                          }),
-                    ),
-                    // ),
-                  ],
-                ),
-              );
+                                          // ),
+                                          // Expanded(
+                                          //   child: Row(
+                                          //     mainAxisAlignment:
+                                          //         MainAxisAlignment.spaceBetween,
+                                          //     children: [
+                                          //       // Text(snapshot.data[index]['user_name']),
+                                          //       Text(
+                                          //         'Status : ' +
+                                          //             snapshot.data[index]['status'],
+                                          //         style: TextStyle(
+                                          //             color: Colors.grey, fontSize: 12),
+                                          //       ),
+                                          //     ],
+                                          //   ),
+                                          // ),
+                                          // SizedBox(height: 30,),
+                                          snapshot.data[index]['status'] ==
+                                                  'Waiting'
+                                              ? Expanded(
+                                                  child: SizedBox(),
+                                                )
+                                              : Expanded(
+                                                  child: Row(children: [
+                                                    Expanded(
+                                                      child: ElevatedButton(
+                                                          onPressed: () {
+                                                            Get.to(
+                                                              () => ChatPage(
+                                                                requestId:
+                                                                    requestId,
+                                                                fromId: fromId,
+                                                                toId: toId,
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Text('Chat')),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Expanded(
+                                                      child: ElevatedButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              showDialog(
+                                                                  context:
+                                                                      context,
+                                                                  builder: (BuildContext
+                                                                          context) =>
+                                                                      AlertDialog(
+                                                                        title: Text(
+                                                                            "Finish?"),
+                                                                        content:
+                                                                            Text("Are you sure your job has finished yet?"),
+                                                                        actions: [
+                                                                          TextButton(
+                                                                            child:
+                                                                                Text("No", style: TextStyle(color: Colors.red)),
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.of(context).pop();
+                                                                            },
+                                                                          ),
+                                                                          TextButton(
+                                                                              child: Text("Yes"),
+                                                                              onPressed: () {
+                                                                                FirebaseFirestore.instance.collection('request_designer').doc(snapshot.data[index].documentID).update({
+                                                                                  'status': 'Finish'
+                                                                                });
+                                                                                setState(() {
+                                                                                  Navigator.popUntil(context, ModalRoute.withName("/"));
+                                                                                });
+                                                                                controller.showNotification('Finish Job', 'Your order is done, Thanks to believe us. See you next');
+                                                                              })
+                                                                        ],
+                                                                      ));
+                                                            });
+                                                          },
+                                                          child:
+                                                              Text('Finish')),
+                                                    ),
+                                                  ]),
+                                                )
+                                        ],
+                                      ),
+                                    ),
+                                    // trailing: document['status'] == 'On Progress'
+                                    //     ? ElevatedButton(
+                                    //         onPressed: () {},
+                                    //         child: Text('Chat'),
+                                    //       )
+                                    //     : document['status'] == 'Finish'
+                                    //         ? ElevatedButton(
+                                    //             onPressed: () {},
+                                    //             child: Text('Review'),
+                                    //           )
+                                    //         : null,
+                                  );
+                                }),
+                          ),
+                          // ),
+                        ],
+                      ),
+                    );
             }
           }),
     );

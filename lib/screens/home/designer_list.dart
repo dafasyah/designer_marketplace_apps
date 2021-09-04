@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/notif_controller.dart';
 import 'package:flutter_application_1/models/designer_store.dart';
 import 'package:flutter_application_1/screens/home/designer_profile_view.dart';
 import 'package:flutter_application_1/screens/home/designer_tile.dart';
@@ -48,6 +49,7 @@ class _ListPageDesignerState extends State<ListPageDesigner> {
   }
 
   Widget build(BuildContext context) {
+    final controller = Get.find<NotifController>();
     return Container(
       child: FutureBuilder(
         future: getPost(),
@@ -82,7 +84,7 @@ class _ListPageDesignerState extends State<ListPageDesigner> {
                               //         builder: (context) => ProfileDesigner())),
                               child: Row(
                                 children: <Widget>[
-                                   Text(snapshot.data[index]['name'])
+                                  Text(snapshot.data[index]['name'])
                                 ],
                               ),
                             ),
@@ -114,13 +116,17 @@ class _ListPageDesignerState extends State<ListPageDesigner> {
                                             TextButton(
                                                 child: Text("Yes"),
                                                 onPressed: () {
+                                                  controller.showNotification(
+                                                      'Order Berhasil',
+                                                      'Status orderan waiting, harap menunggu kami sedang menghubungkan ke pada designer yang Anda pilih');
                                                   FirebaseFirestore.instance
                                                       .collection(
                                                           'request_designer')
                                                       .doc()
                                                       .set({
-                                                    'designer_id': snapshot
-                                                        .data[index]['designer_id'],
+                                                    'designer_id':
+                                                        snapshot.data[index]
+                                                            ['designer_id'],
                                                     'designer_name': snapshot
                                                         .data[index]['name'],
                                                     'user_id': FirebaseAuth

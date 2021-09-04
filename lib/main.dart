@@ -2,6 +2,7 @@ import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/notif_controller.dart';
 import 'package:flutter_application_1/models/designer.dart';
 import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/screens/auth/authenticate.dart';
@@ -80,6 +81,9 @@ class MyApp extends StatelessWidget {
             }
             return Authenticate();
           }),
+      initialBinding: BindingsBuilder(() => {
+            Get.lazyPut<NotifController>(() => NotifController()),
+          }),
       builder: Loading.init(),
     );
     // final user = Provider.of<User>(context);
@@ -131,46 +135,5 @@ class MyApp extends StatelessWidget {
     //       ),
     //     );
     //
-  }
-}
-
-class NotificationApp extends StatefulWidget {
-  @override
-  _NotificationAppState createState() => _NotificationAppState();
-}
-
-class _NotificationAppState extends State<NotificationApp> {
-  FlutterLocalNotificationsPlugin localNotification;
-  @override
-  void initState() {
-    super.initState();
-    var androidInitialize = AndroidInitializationSettings('ic_launcher');
-    var iOSInitialize = IOSInitializationSettings();
-    var initialzationSettings =
-        InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
-    localNotification = FlutterLocalNotificationsPlugin();
-    localNotification.initialize(initialzationSettings);
-  }
-
-  Future _showNotification() async {
-    var androidDetails = AndroidNotificationDetails("channelId",
-        "Local Notification", "This is the description of the Notification",
-        importance: Importance.high);
-
-    var iosDetails = IOSNotificationDetails();
-    var generalNotificationDetails =
-        NotificationDetails(android: androidDetails, iOS: iosDetails);
-    await localNotification.show(
-        0, "Notifi Title", "The body", generalNotificationDetails);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showNotification,
-        child: Icon(Icons.notifications_active),
-      ),
-    );
   }
 }
