@@ -14,7 +14,8 @@ class ProfileDesigner extends StatelessWidget {
 
     userController.buildStramPorto(id: userId, isUser: true);
     userController.getCurrentUser(userId);
-    userController.buildStreamRate(id: userId);
+    //userController.buildStreamRate(id: userId);
+    userController.calculationRate();
 
     return WillPopScope(
       onWillPop: () {
@@ -49,18 +50,22 @@ class ProfileDesigner extends StatelessWidget {
                                   userController.currentUser.value.profile),
                             ),
                     ),
-                    (userController.ratings.isEmpty)
-                        ? Text('No Rate')
-                        : Column(
-                            children: userController.ratings
-                                .map((element) => Text(element.rating))
-                                .toList(),
-                          ),
-                    TextButton(
-                      onPressed: () {
-                        Get.to(() => RatingPage());
-                      },
-                      child: Text('${userController.resultRate.value}'),
+                    TextButton.icon(
+                      onPressed: (userController.resultRate.value.isNaN ||
+                              userController.resultRate.value.isInfinite)
+                          ? null
+                          : () {
+                              Get.to(() => RatingPage());
+                            },
+                      label: Icon(Icons.star_rate_rounded,
+                          color: Colors.yellow[700]),
+                      icon: Text(
+                        userController.resultRate.value.isNaN ||
+                                userController.resultRate.value.isInfinite
+                            ? '0.0'
+                            : '${userController.resultRate.value}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),

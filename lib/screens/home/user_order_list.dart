@@ -51,46 +51,51 @@ class _ListPageState extends State<ListPage> {
               child: Text("Loading..."),
             );
           }
-          return snapshot.data.docs.length == 0 ? Center(child:  Text('You have no order list yet'),) : ListView(
-            children: snapshot.data.docs.map((document) {
-              return ListTile(
-                title: Text(document['designer_name']),
-                subtitle: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text('Status : ' + document['status']),
-                    )
-                  ],
-                ),
-                trailing: document['status'] == 'On Progress'
-                    ? ElevatedButton(
-                        onPressed: () {
-                          Get.to(() => ChatPage(
-                                requestId: document.id,
-                                toId: document['designer_id'],
-                                fromId: FirebaseAuth.instance.currentUser.uid,
-                              ));
-                        },
-                        child: Text('Chat'),
-                      )
-                    : document['status'] == 'Finish'
-                        ? ElevatedButton(
-                            onPressed: () {
-                              Get.to(() => ReviewDesigner(
-                                    userId: document['designer_id'],
-                                    requestId: document.id,
-                                  ));
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => ReviewDesigner()));
-                            },
-                            child: Text('Review'),
+          return snapshot.data.docs.length == 0
+              ? Center(
+                  child: Text('You have no order list yet'),
+                )
+              : ListView(
+                  children: snapshot.data.docs.map((document) {
+                    return ListTile(
+                      title: Text(document['designer_name']),
+                      subtitle: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text('Status : ' + document['status']),
                           )
-                        : SizedBox(),
-              );
-            }).toList(),
-          );
+                        ],
+                      ),
+                      trailing: document['status'] == 'On Progress'
+                          ? ElevatedButton(
+                              onPressed: () {
+                                Get.to(() => ChatPage(
+                                      requestId: document.id,
+                                      toId: document['designer_id'],
+                                      fromId:
+                                          FirebaseAuth.instance.currentUser.uid,
+                                    ));
+                              },
+                              child: Text('Chat'),
+                            )
+                          : document['status'] == 'Finish'
+                              ? ElevatedButton(
+                                  onPressed: () {
+                                    Get.to(() => ReviewDesigner(
+                                          userId: document['designer_id'],
+                                          requestId: document.id,
+                                        ));
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => ReviewDesigner()));
+                                  },
+                                  child: Text('Review'),
+                                )
+                              : SizedBox(),
+                    );
+                  }).toList(),
+                );
         });
   }
 }

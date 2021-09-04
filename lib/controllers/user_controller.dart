@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/user.dart';
+import 'package:flutter_application_1/screens/home/designer_profile_view.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -27,6 +28,8 @@ class UserController extends GetxController {
 
   File pickedFile;
   RxBool isLoading = false.obs;
+  RxBool isGet = false.obs;
+
   String image =
       'https://i.pinimg.com/originals/a8/33/04/a833045c828009d7e4d68f214ac13aad.jpg';
 
@@ -87,18 +90,27 @@ class UserController extends GetxController {
         .toList());
   }
 
+  // ignore: missing_return
   Stream<List<Rating>> listRating({String id}) {
-    ratings.clear();
-    Stream<QuerySnapshot> stream =
-        firestore.collection('user').doc(id).collection('rating').snapshots();
-    return stream.map((event) => event.docs
-        .map((e) => Rating(
-              email: e.data()['email'],
-              from: e.data()['from'],
-              rating: e.data()['rating'],
-              text: e.data()['text'],
-            ))
-        .toList());
+    try {
+      ratings.clear();
+      print('trest');
+      isGet.toggle();
+      Stream<QuerySnapshot> stream =
+          firestore.collection('user').doc(id).collection('rating').snapshots();
+      return stream.map((event) => event.docs
+          .map((e) => Rating(
+                email: e.data()['email'],
+                from: e.data()['from'],
+                rating: e.data()['rating'],
+                text: e.data()['text'],
+              ))
+          .toList());
+    } catch (e) {
+      print(e);
+    } finally {
+      isGet.toggle();
+    }
   }
 
   updateUser({String address, String fullname, String phone, String price}) {
@@ -219,5 +231,22 @@ class UserController extends GetxController {
     isLoading.toggle();
     print(photoPath);
     return photoPath;
+  }
+
+  void splash(String userId) async {
+    await buildStreamRate(id: userId);
+    Future.delayed(Duration(seconds: 3), () {
+      checkRating(userId);
+    });
+  }
+
+  checkRating(String userId) async {
+    ratings.map((element) => print(element.rating)).toList();
+    if (ratings.isNotEmpty) {
+      Get.off(() => ProfileDesigner(userId: userId));
+    } else {
+      Get.off(() => ProfileDesigner(userId: userId));
+      print('gagal');
+    }
   }
 }

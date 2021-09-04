@@ -18,6 +18,7 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
   Widget build(BuildContext context) {
     final userController = Get.put(UserController());
     final controller = Get.find<NotifController>();
+    print(widget.userId);
     userController.getCurrentUser(widget.userId);
     return Container(
       child: Scaffold(

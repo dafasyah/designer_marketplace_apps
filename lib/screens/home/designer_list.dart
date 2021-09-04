@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controllers/notif_controller.dart';
+import 'package:flutter_application_1/controllers/user_controller.dart';
 import 'package:flutter_application_1/models/designer_store.dart';
 import 'package:flutter_application_1/screens/home/designer_profile_view.dart';
 import 'package:flutter_application_1/screens/home/designer_tile.dart';
@@ -50,6 +51,7 @@ class _ListPageDesignerState extends State<ListPageDesigner> {
 
   Widget build(BuildContext context) {
     final controller = Get.find<NotifController>();
+    final userController = Get.find<UserController>();
     return Container(
       child: FutureBuilder(
         future: getPost(),
@@ -74,10 +76,14 @@ class _ListPageDesignerState extends State<ListPageDesigner> {
                           child: ListTile(
                             title: TextButton(
                               onPressed: () => Get.to(
-                                () => ProfileDesigner(
-                                  userId: snapshot.data[index]['designer_id'],
-                                ),
+                                () =>
+                                    Splash(snapshot.data[index]['designer_id']),
                               ),
+                              //  Get.to(
+                              //   () => ProfileDesigner(
+                              //     userId: snapshot.data[index]['designer_id'],
+                              //   ),
+                              // ),
                               // Navigator.push(
                               //     context,
                               //     MaterialPageRoute(
@@ -160,6 +166,23 @@ class _ListPageDesignerState extends State<ListPageDesigner> {
           }
         },
       ),
+    );
+  }
+}
+
+class Splash extends GetView<UserController> {
+  final String userId;
+  Splash(this.userId);
+  @override
+  Widget build(BuildContext context) {
+    print(userId);
+    controller.splash(userId);
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      body: Center(
+          child: CircularProgressIndicator(
+        backgroundColor: Colors.white,
+      )),
     );
   }
 }
