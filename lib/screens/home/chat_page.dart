@@ -10,15 +10,20 @@ class ChatPage extends StatelessWidget {
   final String requestId;
   final String fromId;
   final String toId;
+  final String fullname;
+  final String email;
 
-  ChatPage({this.requestId, this.fromId, this.toId});
+  ChatPage({this.requestId, this.fromId, this.toId, this.fullname, this.email});
   @override
   Widget build(BuildContext context) {
     final chatController = Get.put(ChatController());
     chatController.buildStream(requestId);
+    var chatWith = (fullname != null || fullname != '' || fullname.isNotEmpty)
+        ? fullname
+        : email;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),
+        title: Text('Chat with $chatWith'),
       ),
       body: Column(
         children: [
