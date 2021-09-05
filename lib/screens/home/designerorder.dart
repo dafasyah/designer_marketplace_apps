@@ -102,6 +102,8 @@ class _ListPageState extends State<ListPage> {
                                   var fromId =
                                       snapshot.data[index]['designer_id'];
                                   var toId = snapshot.data[index]['user_id'];
+                                  var email = snapshot.data[index]['user_name'];
+
                                   return ListTile(
                                     // isThreeLine: true,
                                     title:
@@ -196,6 +198,7 @@ class _ListPageState extends State<ListPage> {
                                                                     requestId,
                                                                 fromId: fromId,
                                                                 toId: toId,
+                                                                email: email,
                                                               ),
                                                             );
                                                           },
