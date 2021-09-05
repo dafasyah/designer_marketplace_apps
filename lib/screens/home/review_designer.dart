@@ -53,7 +53,7 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
               ),
               Container(
                 padding: const EdgeInsets.all(15),
-                child: Text(userController.currentDesinger.value.email),
+                child: Text(userController.currentDesinger.value.email ?? ''),
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),

@@ -125,7 +125,7 @@ class UserController extends GetxController {
     });
   }
 
-   updateEmail({String email}) {
+  updateEmail({String email}) {
     CollectionReference users = firestore.collection('user');
     users.doc(user).update({
       'name': email,
@@ -207,7 +207,7 @@ class UserController extends GetxController {
   getCurrentUser(String id) async {
     DocumentSnapshot snapshot = await _userCollection.doc(id).get();
     return currentUser.update((val) {
-      val.name = snapshot.data()['fullname'];
+      val.name = snapshot.data()['fullname'] ?? "";
       val.address = snapshot.data()['address'];
       val.profile = snapshot.data()['photoUrl'];
       val.phone = snapshot.data()['phone_number'];
@@ -216,10 +216,10 @@ class UserController extends GetxController {
     });
   }
 
-   getCurrentDesigner(String id) async {
+  getCurrentDesigner(String id) async {
     DocumentSnapshot snapshot = await _userCollection.doc(id).get();
     return currentDesinger.update((val) {
-      val.name = snapshot.data()['fullname'];
+      val.name = snapshot.data()['fullname'] ?? "";
       val.address = snapshot.data()['address'];
       val.profile = snapshot.data()['photoUrl'];
       val.phone = snapshot.data()['phone_number'];
