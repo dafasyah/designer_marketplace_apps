@@ -20,7 +20,6 @@ class UserController extends GetxController {
   TextEditingController price = TextEditingController();
   RxList<Location> locations = <Location>[].obs;
   Rx<Users> currentUser = Users().obs;
-  Rx<Users> currentDesinger = Users().obs;
 
   RxList<Portofolio> portofolio = <Portofolio>[].obs;
   RxList<Rating> ratings = <Rating>[].obs;
@@ -163,9 +162,9 @@ class UserController extends GetxController {
     Get.back();
   }
 
-  addRating(String email, String id, double rating, String requestId) {
+  addRating({String email, String id, double rating, String requestId, String orderId}) {
     CollectionReference portofolio =
-        firestore.collection('user').doc(id).collection('rating');
+        firestore.collection('user').doc(requestId).collection('rating');
     CollectionReference request = firestore.collection('request_designer');
     try {
       isLoading.toggle();
@@ -176,7 +175,7 @@ class UserController extends GetxController {
         'text': ratingController.text,
         'time_stamp': DateTime.now().millisecondsSinceEpoch,
       });
-      request.doc(requestId).update({'status': 'Reviewed'});
+      request.doc(orderId).update({'status': 'Reviewed'});
     } catch (e) {
       print(e);
     } finally {
@@ -207,18 +206,6 @@ class UserController extends GetxController {
   getCurrentUser(String id) async {
     DocumentSnapshot snapshot = await _userCollection.doc(id).get();
     return currentUser.update((val) {
-      val.name = snapshot.data()['fullname'] ?? "";
-      val.address = snapshot.data()['address'];
-      val.profile = snapshot.data()['photoUrl'];
-      val.phone = snapshot.data()['phone_number'];
-      val.minimumPrice = snapshot.data()['minimum_price'];
-      val.email = snapshot.data()['name'];
-    });
-  }
-
-  getCurrentDesigner(String id) async {
-    DocumentSnapshot snapshot = await _userCollection.doc(id).get();
-    return currentDesinger.update((val) {
       val.name = snapshot.data()['fullname'] ?? "";
       val.address = snapshot.data()['address'];
       val.profile = snapshot.data()['photoUrl'];
