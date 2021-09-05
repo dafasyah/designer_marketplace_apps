@@ -16,7 +16,6 @@ import 'package:toast/toast.dart';
 import 'package:flutter_application_1/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
-
 class ProfileDesignerForm extends StatefulWidget {
   @override
   _ProfileDesignerFormState createState() => _ProfileDesignerFormState();
@@ -28,7 +27,6 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
 
   final user = FirebaseAuth.instance.currentUser.uid;
   TextEditingController emailCT = TextEditingController();
-
 
   // File newProfilePic;
   String _imagePath = '';
@@ -50,7 +48,7 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
     Toast.show(msg, context, duration: duration, gravity: gravity);
   }
 
-  void initState(){
+  void initState() {
     // _designerFullName = TextEditingController();
     _designerAddress = TextEditingController();
     // _designerPhoneNumber = TextEditingController();
@@ -178,6 +176,8 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                                   await _auth.getCurrentUser();
                                               await user
                                                   .updateEmail(emailCT.text);
+                                              userController.updateEmail(
+                                                  email: emailCT.text);
                                             } catch (e) {
                                               Toast.show(e.message, context,
                                                   duration: Toast.LENGTH_LONG,
@@ -223,9 +223,11 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                           border: OutlineInputBorder(),
                                           labelText: 'Full Name',
                                         ),
-                                        initialValue:  (designerName == '' ) ? '' : designerName,
-                                        onChanged: (val) =>
-                                            setState(() => _designerFullName = val),
+                                        initialValue: (designerName == '')
+                                            ? ''
+                                            : designerName,
+                                        onChanged: (val) => setState(
+                                            () => _designerFullName = val),
                                       ),
                                       SizedBox(height: 10.0),
                                       TextField(
@@ -251,7 +253,10 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                           border: OutlineInputBorder(),
                                           labelText: 'Phone Number',
                                         ),
-                                        initialValue: (designerPhoneNumber == '') ? '' : designerPhoneNumber,
+                                        initialValue:
+                                            (designerPhoneNumber == '')
+                                                ? ''
+                                                : designerPhoneNumber,
                                         inputFormatters: [
                                           TextInputMask(
                                               mask: '9999 9999 9999',
@@ -269,7 +274,10 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                           border: OutlineInputBorder(),
                                           labelText: 'Minimum Price',
                                         ),
-                                        initialValue: (designerMinimumPrice == '') ? '' : designerMinimumPrice,
+                                        initialValue:
+                                            (designerMinimumPrice == '')
+                                                ? ''
+                                                : designerMinimumPrice,
                                         inputFormatters: [
                                           TextInputMask(
                                               mask: '\R!p!.! !9+.999',
@@ -300,9 +308,10 @@ class _ProfileDesignerFormState extends State<ProfileDesignerForm> {
                                                 collectionReference =
                                                 FirebaseFirestore.instance
                                                     .collection("user");
-                                            collectionReference.doc(user).update({
-                                              'fullname':
-                                                  _designerFullName,
+                                            collectionReference
+                                                .doc(user)
+                                                .update({
+                                              'fullname': _designerFullName,
                                               'address': mapsController
                                                   .addressController.text,
                                               'phone_number':

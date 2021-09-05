@@ -7,8 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controllers/user_controller.dart';
 import 'package:flutter_application_1/services/auth.dart';
 import 'package:flutter_application_1/services/database.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
 
@@ -49,6 +51,8 @@ class _ProfileUserState extends State<ProfileUser> {
 
   @override
   Widget build(BuildContext context) {
+    final userController = Get.find<UserController>();
+
     return StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
@@ -154,6 +158,8 @@ class _ProfileUserState extends State<ProfileUser> {
                                                   await _auth.getCurrentUser();
                                               await user
                                                   .updateEmail(emailCT.text);
+                                              userController.updateEmail(
+                                                  email: emailCT.text);
                                             } catch (e) {
                                               Toast.show(e.message, context,
                                                   duration: Toast.LENGTH_LONG,

@@ -125,6 +125,13 @@ class UserController extends GetxController {
     });
   }
 
+   updateEmail({String email}) {
+    CollectionReference users = firestore.collection('user');
+    users.doc(user).update({
+      'name': email,
+    });
+  }
+
   updateImage({String image}) {
     CollectionReference users = firestore.collection('user');
     users.doc(user).update({

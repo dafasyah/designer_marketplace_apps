@@ -37,10 +37,15 @@ class ChatPage extends StatelessWidget {
                       icon: Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () => Get.back()),
                   Expanded(
-                    child: Text(
-                      'Chat with $email',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                    child: (email == null)
+                        ? Text(
+                            'Chat',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          )
+                        : Text(
+                            'Chat with $email',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
                   ),
                 ],
               ),
