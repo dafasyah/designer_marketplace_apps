@@ -57,8 +57,6 @@ class _ListPageState extends State<ListPage> {
                 )
               : ListView(
                   children: snapshot.data.docs.map((document) {
-                    final fullname = document['fullname'];
-                    final email = document['name'];
                     return ListTile(
                       title: Text(document['designer_name']),
                       subtitle: Row(
@@ -72,8 +70,7 @@ class _ListPageState extends State<ListPage> {
                           ? ElevatedButton(
                               onPressed: () {
                                 Get.to(() => ChatPage(
-                                  email: email,
-                                  fullname: fullname,
+                                      email: document['designer_name'],
                                       requestId: document.id,
                                       toId: document['designer_id'],
                                       fromId:
