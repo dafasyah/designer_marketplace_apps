@@ -18,11 +18,34 @@ class ChatPage extends StatelessWidget {
     final chatController = Get.put(ChatController());
     chatController.buildStream(requestId);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat with $email'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Chat with $email'),
+      // ),
       body: Column(
         children: [
+          Container(
+            width: double.infinity,
+            height: 80,
+            color: Colors.blue,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 18),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => Get.back()),
+                  Expanded(
+                    child: Text(
+                      'Chat with $email',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           Expanded(
             child: SingleChildScrollView(
               child: Obx(

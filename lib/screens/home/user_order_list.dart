@@ -83,8 +83,9 @@ class _ListPageState extends State<ListPage> {
                               ? ElevatedButton(
                                   onPressed: () {
                                     Get.to(() => ReviewDesigner(
-                                          userId: document['designer_id'],
-                                          requestId: document.id,
+                                          userId: document['user_id'] ?? '',
+                                          requestId:
+                                              document['designer_id'] ?? '',
                                         ));
                                     // Navigator.push(
                                     //     context,

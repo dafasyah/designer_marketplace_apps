@@ -20,6 +20,7 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
     final controller = Get.find<NotifController>();
     print(widget.userId);
     userController.getCurrentUser(widget.userId);
+    userController.getCurrentDesigner(widget.requestId);
     return Container(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -33,7 +34,8 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Obx(
-                () => (userController.currentUser.value.profile == null)
+                () => (userController.currentDesinger.value.profile == null ||
+                        userController.currentUser.value.name == null)
                     ? Container(
                         padding: const EdgeInsets.all(10),
                         child: Expanded(
@@ -46,12 +48,12 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
                     : CircleAvatar(
                         radius: 65,
                         backgroundImage: NetworkImage(
-                            userController.currentUser.value.profile),
+                            userController.currentDesinger.value.profile),
                       ),
               ),
               Container(
                 padding: const EdgeInsets.all(15),
-                child: Text(userController.currentUser.value.name),
+                child: Text(userController.currentDesinger.value.email),
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
@@ -93,9 +95,9 @@ class _ReviewDesignerState extends State<ReviewDesigner> {
                           onPressed: () {
                             userController.addRating(
                                 userController.currentUser.value.email,
-                                widget.userId,
+                                widget.requestId,
                                 rating,
-                                widget.requestId);
+                                widget.userId);
                             controller.showNotification('Reviewed',
                                 'Anda telah memberikan rating $rating');
                           },

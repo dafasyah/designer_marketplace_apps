@@ -20,6 +20,8 @@ class UserController extends GetxController {
   TextEditingController price = TextEditingController();
   RxList<Location> locations = <Location>[].obs;
   Rx<Users> currentUser = Users().obs;
+  Rx<Users> currentDesinger = Users().obs;
+
   RxList<Portofolio> portofolio = <Portofolio>[].obs;
   RxList<Rating> ratings = <Rating>[].obs;
   var selectedImagePath = ''.obs;
@@ -198,6 +200,18 @@ class UserController extends GetxController {
   getCurrentUser(String id) async {
     DocumentSnapshot snapshot = await _userCollection.doc(id).get();
     return currentUser.update((val) {
+      val.name = snapshot.data()['fullname'];
+      val.address = snapshot.data()['address'];
+      val.profile = snapshot.data()['photoUrl'];
+      val.phone = snapshot.data()['phone_number'];
+      val.minimumPrice = snapshot.data()['minimum_price'];
+      val.email = snapshot.data()['name'];
+    });
+  }
+
+   getCurrentDesigner(String id) async {
+    DocumentSnapshot snapshot = await _userCollection.doc(id).get();
+    return currentDesinger.update((val) {
       val.name = snapshot.data()['fullname'];
       val.address = snapshot.data()['address'];
       val.profile = snapshot.data()['photoUrl'];
