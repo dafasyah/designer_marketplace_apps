@@ -113,7 +113,7 @@ class _SignInState extends State<SignIn> {
                                 gravity: Toast.BOTTOM);
                           }
                         },
-                        child: Text('Forgot Password ? get now')),
+                        child: Text('Forgot password?')),
                     // TextButton(
                     //   child: Text('Sign In as Anonymous',
                     //   style: TextStyle(color:Colors.blue[400]),

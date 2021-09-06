@@ -84,7 +84,7 @@ class ProfileDesigner extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text(userController.currentUser.value.minimumPrice,
+                      child: Text("Minimum Price: "+userController.currentUser.value.minimumPrice,
                           textAlign: TextAlign.center),
                     ),
                     SizedBox(height: 24),

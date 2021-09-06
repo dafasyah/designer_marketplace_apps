@@ -66,7 +66,7 @@ class DesignerProfileUpdate extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5),
-                      child: Text(
+                      child: Text("Minimum Price: " +
                           userController.currentUser.value.minimumPrice
                               .toString(),
                           textAlign: TextAlign.center),
