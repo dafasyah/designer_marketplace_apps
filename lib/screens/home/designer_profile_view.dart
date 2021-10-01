@@ -114,7 +114,7 @@ class ProfileDesigner extends StatelessWidget {
                                   () => ZoomPortofolio(
                                     userController.portofolio[index].image,
                                     userController.portofolio[index].id,
-                                    isUser: true,
+                                    isUser: false,
                                   ),
                                 ),
                                 child: Container(
